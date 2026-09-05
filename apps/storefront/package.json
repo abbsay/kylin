@@ -1,0 +1,38 @@
+{
+  "name": "kylin-storefront",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 3001 --host 0.0.0.0",
+    "build": "tsc && vite build",
+    "preview": "vite preview --port 3001"
+  },
+  "dependencies": {
+    "@number-flow/react": "^0.6.2",
+    "@tanstack/react-form": "^1.0.0",
+    "@tanstack/react-query": "^5.67.2",
+    "@tanstack/react-query-devtools": "^5.102.8",
+    "@tanstack/react-router": "^1.114.28",
+    "@tanstack/react-table": "^8.21.2",
+    "@tanstack/react-virtual": "^3.13.2",
+    "clsx": "^2.1.1",
+    "i18next": "^26.4.1",
+    "i18next-browser-languagedetector": "^8.2.1",
+    "lucide-react": "^1.16.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-i18next": "^17.0.13",
+    "sonner": "^2.0.8",
+    "tailwind-merge": "^3.0.2",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.0.12",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^4.3.4",
+    "tailwindcss": "^4.0.12",
+    "typescript": "^5.7.3",
+    "vite": "^6.2.0"
+  }
+}
