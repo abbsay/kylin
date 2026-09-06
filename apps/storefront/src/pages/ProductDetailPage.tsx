@@ -6,13 +6,16 @@ import { useStore } from '../lib/StoreContext';
 import { useQuery } from '@tanstack/react-query';
 import { fetchSaleorProducts, INITIAL_PRODUCTS } from '../lib/catalog';
 import { productsQueryOptions } from '../lib/queryClient';
-import { KylinProduct, ProductVariant } from '../types';
+import { KylinProduct, ProductVariant, CartItem } from '../types';
 import NumberFlow from '@number-flow/react';
 import { toast } from 'sonner';
 import { CartDrawer } from '../components/CartDrawer';
 import { CheckoutModal } from '../components/CheckoutModal';
 import { LanguageDropdown } from '../components/LanguageDropdown';
 import { FooterCompliance } from '../components/FooterCompliance';
+import { AddToCartButton } from '../components/AddToCartButton';
+import { MiniCartBadge } from '../components/MiniCartBadge';
+import { useCartQuery } from '../lib/cartQuery';
 import {
   ArrowLeft,
   ShoppingBag,
@@ -42,14 +45,13 @@ export const ProductDetailPage: React.FC = () => {
   const { t, i18n } = useTranslation();
   const {
     addToCart,
-    cart,
     setIsCartOpen,
     theme,
     toggleTheme,
   } = useStore();
+  const { totalItems: totalCartCount } = useCartQuery();
 
   const isZh = i18n.language.startsWith('zh');
-  const totalCartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   // Scroll to top on navigation
   useEffect(() => {
@@ -77,6 +79,7 @@ export const ProductDetailPage: React.FC = () => {
   const [quantity, setQuantity] = useState(1);
   const [addedNotice, setAddedNotice] = useState(false);
   const [showStickyBar, setShowStickyBar] = useState(false);
+  const [simulateError, setSimulateError] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'engineering' | 'craft'>('overview');
 
   // Set default variant
@@ -192,13 +195,29 @@ export const ProductDetailPage: React.FC = () => {
     }
   };
 
+  const currentCartItem: CartItem | null = currentVariant && product ? {
+    variantId: currentVariant.id,
+    productSlug: product.slug,
+    productName: isZh ? product.nameZh : product.name,
+    variantName: isZh ? (currentVariant.nameZh || currentVariant.name) : currentVariant.name.replace(/\s*\([^)]*[一-龥]+[^)]*\)/g, '').trim(),
+    sku: currentVariant.sku,
+    price: currentVariant.price,
+    currency: 'USD',
+    quantity,
+    imageUrl: displayImageUrl,
+  } : null;
+
   const handleAddToCart = () => {
     if (!currentVariant) return;
+    const cleanVariantName = isZh
+      ? (currentVariant.nameZh || currentVariant.name)
+      : currentVariant.name.replace(/\s*\([^)]*[一-龥]+[^)]*\)/g, '').trim();
+
     addToCart({
       variantId: currentVariant.id,
       productSlug: product.slug,
       productName: isZh ? product.nameZh : product.name,
-      variantName: currentVariant.name,
+      variantName: cleanVariantName,
       sku: currentVariant.sku,
       price: currentVariant.price,
       currency: 'USD',
@@ -210,8 +229,8 @@ export const ProductDetailPage: React.FC = () => {
 
     toast.success(
       isZh
-        ? `已将 ${isZh ? product.nameZh : product.name} (${currentVariant.name}) × ${quantity} 加入购物袋`
-        : `Added ${product.name} (${currentVariant.name}) × ${quantity} to Bag`,
+        ? `已将 ${product.nameZh} (${currentVariant.nameZh || currentVariant.name}) × ${quantity} 加入购物袋`
+        : `Added ${product.name} (${cleanVariantName}) × ${quantity} to Bag`,
       {
         description: `$${(currentVariant.price * quantity).toFixed(2)} USD • Free Global Delivery`,
       }
@@ -307,11 +326,7 @@ export const ProductDetailPage: React.FC = () => {
               aria-label="Cart"
             >
               <ShoppingBag className="w-4 h-4" />
-              {totalCartCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-[#c5a059] text-white text-[9px] font-bold rounded-full flex items-center justify-center">
-                  {totalCartCount}
-                </span>
-              )}
+              <MiniCartBadge count={totalCartCount} />
             </button>
           </div>
         </div>
@@ -332,7 +347,7 @@ export const ProductDetailPage: React.FC = () => {
                 <img
                   key={displayImageUrl}
                   src={displayImageUrl}
-                  alt={currentVariant ? `${product.name} - ${currentVariant.name}` : product.name}
+                  alt={currentVariant ? `${isZh ? product.nameZh : product.name} - ${isZh ? (currentVariant.nameZh || currentVariant.name) : currentVariant.name.replace(/\s*\([^)]*[一-龥]+[^)]*\)/g, '').trim()}` : (isZh ? product.nameZh : product.name)}
                   className="w-full h-full object-cover object-center group-hover:scale-[1.03] transition-all duration-700 ease-out"
                 />
 
@@ -362,6 +377,8 @@ export const ProductDetailPage: React.FC = () => {
                 <div className="flex items-center gap-2.5 overflow-x-auto py-2.5 px-2.5 -mx-2.5 no-scrollbar scroll-smooth">
                   {galleryImages.map((img, idx) => {
                     const isActive = displayImageUrl === img.url;
+                    const rawAlt = img.alt || `Photo ${idx + 1}`;
+                    const displayAlt = isZh ? rawAlt : rawAlt.replace(/\s*\([^)]*[一-龥]+[^)]*\)/g, '').replace(/[一-龥]/g, '').trim();
                     return (
                       <button
                         key={img.id || img.url}
@@ -372,11 +389,11 @@ export const ProductDetailPage: React.FC = () => {
                             ? 'ring-2 ring-[#c5a059] ring-offset-2 ring-offset-[#fbfbfd] dark:ring-offset-[#000000] shadow-[0_4px_16px_rgba(197,160,89,0.25)] scale-[1.03] opacity-100'
                             : 'opacity-60 hover:opacity-100 border border-black/10 dark:border-white/10 hover:border-black/30 dark:hover:border-white/30 hover:scale-[1.02]'
                         }`}
-                        title={img.alt || `Photo ${idx + 1}`}
+                        title={displayAlt}
                       >
                         <img
                           src={img.url}
-                          alt={img.alt || `Product thumbnail ${idx + 1}`}
+                          alt={displayAlt}
                           className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
                         />
                       </button>
@@ -491,7 +508,7 @@ export const ProductDetailPage: React.FC = () => {
                             key={v.id}
                             type="button"
                             onClick={() => setSelectedVariantId(v.id)}
-                            aria-label={v.name}
+                            aria-label={isZh ? (v.nameZh || v.name) : v.name.replace(/\s*\([^)]*[一-龥]+[^)]*\)/g, '').trim()}
                             className={`group relative p-1 rounded-full transition-all ${
                               isSelected
                                 ? 'ring-2 ring-[#c5a059] ring-offset-2 ring-offset-[#fbfbfd] dark:ring-offset-[#000000] scale-105'
@@ -526,7 +543,7 @@ export const ProductDetailPage: React.FC = () => {
                           : 'Configuration'}
                       </span>
                       <span className="text-[#86868b] font-mono text-[11px] truncate text-right max-w-[200px]">
-                        {currentVariant.name}
+                        {isZh ? (currentVariant.nameZh || currentVariant.name) : currentVariant.name.replace(/\s*\([^)]*[一-龥]+[^)]*\)/g, '').trim()}
                       </span>
                     </div>
 
@@ -567,7 +584,7 @@ export const ProductDetailPage: React.FC = () => {
                                         : 'text-[#424245] dark:text-[#d1d1d6] font-medium'
                                     }`}
                                   >
-                                    {v.name}
+                                    {isZh ? (v.nameZh || v.name) : v.name.replace(/\s*\([^)]*[一-龥]+[^)]*\)/g, '').trim()}
                                   </span>
                                   {v.sku && (
                                     <span className="text-[10px] font-mono text-[#86868b] block mt-0.5">
@@ -602,7 +619,7 @@ export const ProductDetailPage: React.FC = () => {
                               }`}
                             >
                               <span className="text-xs font-medium block truncate max-w-full">
-                                {v.name}
+                                {isZh ? (v.nameZh || v.name) : v.name.replace(/\s*\([^)]*[一-龥]+[^)]*\)/g, '').trim()}
                               </span>
                               <span className="text-[10px] font-mono text-[#86868b] block mt-0.5">
                                 ${v.price.toFixed(2)}
@@ -642,15 +659,45 @@ export const ProductDetailPage: React.FC = () => {
                   </button>
                 </div>
 
+                {currentCartItem ? (
+                  <AddToCartButton
+                    item={currentCartItem}
+                    className="flex-1"
+                    label={isZh ? `加入购物袋 · $${(displayPrice * quantity).toFixed(2)}` : `Add to Bag · $${(displayPrice * quantity).toFixed(2)}`}
+                    successLabel={isZh ? '已加入 ✓' : 'Added to Bag ✓'}
+                    simulateError={simulateError}
+                  />
+                ) : (
+                  <button
+                    type="button"
+                    disabled
+                    className="apple-btn flex-1 py-3.5 px-6 rounded-full bg-black/10 dark:bg-white/10 text-[#86868b] font-semibold text-xs tracking-tight cursor-not-allowed flex items-center justify-center gap-2"
+                  >
+                    <ShoppingBag className="w-4 h-4" />
+                    <span>{isZh ? '暂无库存' : 'Out of Stock'}</span>
+                  </button>
+                )}
+              </div>
+
+              {/* Developer / Apple Quality Assurance: Instant Error Rollback Simulator */}
+              <div className="pt-2 flex items-center justify-between text-[11px] text-[#86868b]">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block" />
+                  <span>{isZh ? 'TanStack Query 零延迟乐观更新已就绪' : 'TanStack Query Zero-Latency Cache Ready'}</span>
+                </span>
                 <button
                   type="button"
-                  onClick={handleAddToCart}
-                  className="apple-btn flex-1 py-3.5 px-6 rounded-full bg-[#1d1d1f] text-white dark:bg-white dark:text-[#1d1d1f] hover:opacity-95 font-semibold text-xs tracking-tight transition-all shadow-md flex items-center justify-center gap-2 active:scale-[0.99]"
+                  onClick={() => setSimulateError(prev => !prev)}
+                  className={`text-[10px] px-2 py-0.5 rounded-full border transition-all ${
+                    simulateError
+                      ? 'border-[#ef4444] text-[#ef4444] bg-[#ef4444]/10 font-semibold'
+                      : 'border-black/10 dark:border-white/10 text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-white'
+                  }`}
+                  title={isZh ? '点击切换模拟服务端库存异常，触发自动回滚' : 'Toggle simulated server error to test rollback'}
                 >
-                  <ShoppingBag className="w-4 h-4" />
-                  <span>
-                    {addedNotice ? (isZh ? '已加入 ✓' : 'Added to Bag ✓') : isZh ? `加入购物袋 · $${(displayPrice * quantity).toFixed(2)}` : `Add to Bag · $${(displayPrice * quantity).toFixed(2)}`}
-                  </span>
+                  {simulateError
+                    ? (isZh ? '⚠️ 模拟异常模式已开启' : '⚠️ Error Sim ON')
+                    : (isZh ? '测试自动回滚' : 'Test Rollback')}
                 </button>
               </div>
             </div>
@@ -977,14 +1024,15 @@ export const ProductDetailPage: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-1.5 shrink-0">
-            <button
-              type="button"
-              onClick={handleAddToCart}
-              className="apple-btn px-3.5 sm:px-5 py-2 rounded-full bg-[#1d1d1f] text-white dark:bg-white dark:text-[#1d1d1f] text-[11px] sm:text-xs font-semibold shadow-xs hover:opacity-95 whitespace-nowrap active:scale-[0.98] transition-all flex items-center gap-1.5"
-            >
-              <ShoppingBag className="w-3.5 h-3.5" />
-              <span>{addedNotice ? (isZh ? '已加入 ✓' : 'Added ✓') : isZh ? '加入购物袋' : 'Add to Bag'}</span>
-            </button>
+            {currentCartItem && (
+              <AddToCartButton
+                item={currentCartItem}
+                size="compact"
+                label={isZh ? '加入购物袋' : 'Add to Bag'}
+                successLabel={isZh ? '已加入 ✓' : 'Added ✓'}
+                simulateError={simulateError}
+              />
+            )}
           </div>
         </div>
       </div>

@@ -19,12 +19,13 @@ def sync_credentials():
         print("Disabled enable_account_confirmation_by_email")
 
     # 2. Key accounts to lock with permanent passwords
+    default_pw = os.environ.get('KYLIN_ADMIN_PASSWORD', 'KylinTattoo2026!')
     ACCOUNTS = [
-        ('admin@kylintattoo.com', 'KylinTattoo2026!', True, True),
-        ('admin@kylin.com', 'KylinTattoo2026!', True, True),
-        ('artist@kylintattoo.com', 'KylinTattoo2026!', False, False),
-        ('artist_test@kylintattoo.com', 'KylinTattoo2026!', False, False),
-        ('tattoo_master_99@gmail.com', 'KylinTattoo2026!', False, False),
+        ('admin@kylintattoo.com', default_pw, True, True),
+        ('admin@kylin.com', default_pw, True, True),
+        ('artist@kylintattoo.com', default_pw, False, False),
+        ('artist_test@kylintattoo.com', default_pw, False, False),
+        ('tattoo_master_99@gmail.com', default_pw, False, False),
     ]
 
     for email, password, is_staff, is_superuser in ACCOUNTS:

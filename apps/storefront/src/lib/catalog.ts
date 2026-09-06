@@ -18,7 +18,7 @@ export const INITIAL_PRODUCTS: KylinProduct[] = [
     description: 'Swiss Maxon medical-grade brushless core, surgical Grade 5 Titanium body. Near-zero thermal dissipation and virtually imperceptible vibration during extended lining and shading.',
     descriptionZh: '瑞士原装进口 Maxon 医用级无刷马达，航天 TC4 钛合金 CNC 精密镂空机身。超低发热、近乎零手部震动感，专为顶级纹身师严苛高强度作业打造。',
     motor: 'Swiss Maxon Brushless (12V / 11,500 RPM)',
-    material: 'Grade 5 Titanium (TC4 航空钛合金)',
+    material: 'Grade 5 Titanium (Ti-6Al-4V)',
     voltage: '5.5V - 10.5V (Recommended 7.5V)',
     weight: '142g (Ultra Balanced)',
     strokeOptions: ['3.5mm Universal', '4.2mm Bold Liner'],
@@ -34,10 +34,10 @@ export const INITIAL_PRODUCTS: KylinProduct[] = [
       { id: 'm-e30-4', url: 'http://localhost:8002/media/products/e30_royal_gold.jpg', alt: 'Kylin E30 Royal Gold' },
     ],
     variants: [
-      { id: 'UHJvZHVjdFZhcmlhbnQ6MQ==', name: 'Raw Titanium (钛原色)', sku: 'KYLIN-E30-RAW', price: 260.00, currency: 'USD', stroke: '3.5mm (Universal Standard)', color: 'Raw Titanium', imageUrl: 'http://localhost:8002/media/products/e30_raw_titanium.jpg' },
-      { id: 'UHJvZHVjdFZhcmlhbnQ6Mg==', name: 'Matte Black (曜石黑)', sku: 'KYLIN-E30-BLK', price: 260.00, currency: 'USD', stroke: '3.5mm (Universal Standard)', color: 'Matte Black', imageUrl: 'http://localhost:8002/media/products/e30_matte_black.jpg' },
-      { id: 'UHJvZHVjdFZhcmlhbnQ6Mw==', name: 'Space Grey (深空灰)', sku: 'KYLIN-E30-GRY', price: 260.00, currency: 'USD', stroke: '3.5mm (Universal Standard)', color: 'Space Grey', imageUrl: 'http://localhost:8002/media/products/e30_space_grey.jpg' },
-      { id: 'UHJvZHVjdFZhcmlhbnQ6NA==', name: 'Royal Gold (皇家金)', sku: 'KYLIN-E30-GLD', price: 275.00, currency: 'USD', stroke: '3.5mm (Universal Standard)', color: 'Royal Gold', imageUrl: 'http://localhost:8002/media/products/e30_royal_gold.jpg' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6MQ==', name: 'Raw Titanium', nameZh: 'Raw Titanium (钛原色)', sku: 'KYLIN-E30-RAW', price: 260.00, currency: 'USD', stroke: '3.5mm (Universal Standard)', color: 'Raw Titanium', imageUrl: 'http://localhost:8002/media/products/e30_raw_titanium.jpg' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6Mg==', name: 'Matte Black', nameZh: 'Matte Black (曜石黑)', sku: 'KYLIN-E30-BLK', price: 260.00, currency: 'USD', stroke: '3.5mm (Universal Standard)', color: 'Matte Black', imageUrl: 'http://localhost:8002/media/products/e30_matte_black.jpg' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6Mw==', name: 'Space Grey', nameZh: 'Space Grey (深空灰)', sku: 'KYLIN-E30-GRY', price: 260.00, currency: 'USD', stroke: '3.5mm (Universal Standard)', color: 'Space Grey', imageUrl: 'http://localhost:8002/media/products/e30_space_grey.jpg' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6NA==', name: 'Royal Gold', nameZh: 'Royal Gold (皇家金)', sku: 'KYLIN-E30-GLD', price: 275.00, currency: 'USD', stroke: '3.5mm (Universal Standard)', color: 'Royal Gold', imageUrl: 'http://localhost:8002/media/products/e30_royal_gold.jpg' },
     ]
   },
   {
@@ -67,9 +67,9 @@ export const INITIAL_PRODUCTS: KylinProduct[] = [
       { id: 'm-fh26-3', url: 'http://localhost:8002/media/products/fh26_royal_gold.jpg', alt: 'Kylin Faulhaber 2610 Royal Gold' },
     ],
     variants: [
-      { id: 'UHJvZHVjdFZhcmlhbnQ6NQ==', name: 'Space Grey (深空灰)', sku: 'KYLIN-FH26-GRY', price: 138.00, currency: 'USD', stroke: '3.5mm (Universal Standard)', color: 'Space Grey', imageUrl: 'http://localhost:8002/media/products/fh26_space_grey.jpg' },
-      { id: 'UHJvZHVjdFZhcmlhbnQ6Ng==', name: 'Matte Black (哑光黑)', sku: 'KYLIN-FH26-BLK', price: 138.00, currency: 'USD', stroke: '3.5mm (Universal Standard)', color: 'Matte Black', imageUrl: 'http://localhost:8002/media/products/fh26_matte_black.jpg' },
-      { id: 'UHJvZHVjdFZhcmlhbnQ6Nw==', name: 'Royal Gold (荣耀金)', sku: 'KYLIN-FH26-GLD', price: 145.00, currency: 'USD', stroke: '3.5mm (Universal Standard)', color: 'Royal Gold', imageUrl: 'http://localhost:8002/media/products/fh26_royal_gold.jpg' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6NQ==', name: 'Space Grey', nameZh: 'Space Grey (深空灰)', sku: 'KYLIN-FH26-GRY', price: 138.00, currency: 'USD', stroke: '3.5mm (Universal Standard)', color: 'Space Grey', imageUrl: 'http://localhost:8002/media/products/fh26_space_grey.jpg' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6Ng==', name: 'Matte Black', nameZh: 'Matte Black (哑光黑)', sku: 'KYLIN-FH26-BLK', price: 138.00, currency: 'USD', stroke: '3.5mm (Universal Standard)', color: 'Matte Black', imageUrl: 'http://localhost:8002/media/products/fh26_matte_black.jpg' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6Nw==', name: 'Royal Gold', nameZh: 'Royal Gold (荣耀金)', sku: 'KYLIN-FH26-GLD', price: 145.00, currency: 'USD', stroke: '3.5mm (Universal Standard)', color: 'Royal Gold', imageUrl: 'http://localhost:8002/media/products/fh26_royal_gold.jpg' },
     ]
   },
   {
@@ -94,14 +94,14 @@ export const INITIAL_PRODUCTS: KylinProduct[] = [
     badgeZh: '双电无线机王',
     imageUrl: 'http://localhost:8002/media/products/t7max_wireless_real.png',
     variants: [
-      { id: 'UHJvZHVjdFZhcmlhbnQ6OA==', name: 'Matte Black (曜石黑 - 双电)', sku: 'KYLIN-T7M-BLK', price: 350.00, currency: 'USD', stroke: 'Adjustable', color: 'Matte Black', imageUrl: 'http://localhost:8002/media/products/t7max_wireless_real.png' },
-      { id: 'UHJvZHVjdFZhcmlhbnQ6OQ==', name: 'Space Grey (深空灰 - 双电)', sku: 'KYLIN-T7M-GRY', price: 350.00, currency: 'USD', stroke: 'Adjustable', color: 'Space Grey', imageUrl: 'http://localhost:8002/media/products/t7max_wireless_real.png' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6OA==', name: 'Matte Black (Dual Battery)', nameZh: 'Matte Black (曜石黑 - 双电)', sku: 'KYLIN-T7M-BLK', price: 350.00, currency: 'USD', stroke: 'Adjustable', color: 'Matte Black', imageUrl: 'http://localhost:8002/media/products/t7max_wireless_real.png' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6OQ==', name: 'Space Grey (Dual Battery)', nameZh: 'Space Grey (深空灰 - 双电)', sku: 'KYLIN-T7M-GRY', price: 350.00, currency: 'USD', stroke: 'Adjustable', color: 'Space Grey', imageUrl: 'http://localhost:8002/media/products/t7max_wireless_real.png' },
     ]
   },
   {
     id: 'UHJvZHVjdDo0',
     slug: 'kylin-black-ghost-handmade-brass',
-    name: 'Kylin Black Ghost (黑鬼) Handmade Brass Machine',
+    name: 'Kylin Black Ghost Handmade Brass Machine',
     nameZh: 'Kylin 黑鬼 手工失蜡纯黄铜发蓝旧化重锤机',
     categorySlug: 'machines',
     categoryName: 'Machines',
@@ -125,9 +125,9 @@ export const INITIAL_PRODUCTS: KylinProduct[] = [
       { id: 'm-bg-3', url: 'http://localhost:8002/media/products/black_ghost_brass.jpg', alt: 'Kylin Black Ghost Raw Brass Vintage' },
     ],
     variants: [
-      { id: 'UHJvZHVjdFZhcmlhbnQ6MTA=', name: 'Antique Blue (古法药水发蓝 / 割线)', sku: 'KYLIN-BG-LINER-BLU', price: 250.00, currency: 'USD', tuning: 'Liner (割线专用)', color: 'Antique Blue', imageUrl: 'http://localhost:8002/media/products/black_ghost_real_blue.jpg' },
-      { id: 'UHJvZHVjdFZhcmlhbnQ6MTE=', name: 'Antique Blue (古法药水发蓝 / 打雾)', sku: 'KYLIN-BG-SHADER-BLU', price: 250.00, currency: 'USD', tuning: 'Shader (打雾专用)', color: 'Antique Blue', imageUrl: 'http://localhost:8002/media/products/black_ghost_real_macro.jpg' },
-      { id: 'UHJvZHVjdFZhcmlhbnQ6MTI=', name: 'Raw Brass (原色复古铜)', sku: 'KYLIN-BG-RAW-BRS', price: 250.00, currency: 'USD', tuning: 'Liner (割线专用)', color: 'Polished Brass', imageUrl: 'http://localhost:8002/media/products/black_ghost_brass.jpg' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6MTA=', name: 'Antique Blue (Liner)', nameZh: 'Antique Blue (古法药水发蓝 / 割线)', sku: 'KYLIN-BG-LINER-BLU', price: 250.00, currency: 'USD', tuning: 'Liner', tuningZh: 'Liner (割线专用)', color: 'Antique Blue', imageUrl: 'http://localhost:8002/media/products/black_ghost_real_blue.jpg' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6MTE=', name: 'Antique Blue (Shader)', nameZh: 'Antique Blue (古法药水发蓝 / 打雾)', sku: 'KYLIN-BG-SHADER-BLU', price: 250.00, currency: 'USD', tuning: 'Shader', tuningZh: 'Shader (打雾专用)', color: 'Antique Blue', imageUrl: 'http://localhost:8002/media/products/black_ghost_real_macro.jpg' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6MTI=', name: 'Raw Brass (Liner)', nameZh: 'Raw Brass (原色复古铜)', sku: 'KYLIN-BG-RAW-BRS', price: 250.00, currency: 'USD', tuning: 'Liner', tuningZh: 'Liner (割线专用)', color: 'Polished Brass', imageUrl: 'http://localhost:8002/media/products/black_ghost_brass.jpg' },
     ]
   },
   {
@@ -156,8 +156,8 @@ export const INITIAL_PRODUCTS: KylinProduct[] = [
       { id: 'm-r07-2', url: 'http://localhost:8002/media/products/r07_patina.jpg', alt: 'Kylin R07 Antique Vintage Patina' },
     ],
     variants: [
-      { id: 'UHJvZHVjdFZhcmlhbnQ6MTM=', name: 'Polished Brass (镜面纯黄铜)', sku: 'KYLIN-R07-LINER-BRS', price: 149.00, currency: 'USD', tuning: 'Liner (割线专用)', color: 'Polished Brass', imageUrl: 'http://localhost:8002/media/products/r07_polished.png' },
-      { id: 'UHJvZHVjdFZhcmlhbnQ6MTQ=', name: 'Antique Vintage Patina (复古氧化铜)', sku: 'KYLIN-R07-VINTAGE', price: 159.00, currency: 'USD', tuning: 'Liner (割线专用)', color: 'Antique Blue', imageUrl: 'http://localhost:8002/media/products/r07_patina.jpg' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6MTM=', name: 'Polished Brass', nameZh: 'Polished Brass (镜面纯黄铜)', sku: 'KYLIN-R07-LINER-BRS', price: 149.00, currency: 'USD', tuning: 'Liner', tuningZh: 'Liner (割线专用)', color: 'Polished Brass', imageUrl: 'http://localhost:8002/media/products/r07_polished.png' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6MTQ=', name: 'Antique Vintage Patina', nameZh: 'Antique Vintage Patina (复古氧化铜)', sku: 'KYLIN-R07-VINTAGE', price: 159.00, currency: 'USD', tuning: 'Liner', tuningZh: 'Liner (割线专用)', color: 'Antique Blue', imageUrl: 'http://localhost:8002/media/products/r07_patina.jpg' },
     ]
   },
   {
@@ -347,13 +347,15 @@ export async function fetchSaleorProducts(channel: string = SALEOR_CHANNEL): Pro
 
         return {
           id: v.id, // REAL Saleor GraphQL ID e.g. UHJvZHVjdFZhcmlhbnQ6MQ==
-          name: v.name,
+          name: initialVariant?.name || v.name,
+          nameZh: initialVariant?.nameZh || v.name,
           sku: v.sku,
           price,
           currency,
           stroke: initialVariant?.stroke,
           color: initialVariant?.color,
           tuning: initialVariant?.tuning,
+          tuningZh: initialVariant?.tuningZh,
           imageUrl,
         };
       });

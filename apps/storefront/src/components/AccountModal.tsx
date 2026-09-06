@@ -204,8 +204,18 @@ export const AccountModal: React.FC = () => {
             </form>
 
             <div className="mt-5 p-3.5 rounded-2xl bg-black/[0.03] dark:bg-white/[0.03] border border-black/5 dark:border-white/10 text-[11px] text-[#86868b] text-left leading-relaxed">
-              <span className="font-semibold text-[#c5a059] block mb-1">Saleor Core JWT 凭据提示：</span>
-              可用管理员账户直接体验：<code className="text-xs font-mono font-semibold text-[#1d1d1f] dark:text-white">admin@kylintattoo.com</code> / 密码：<code className="text-xs font-mono font-semibold text-[#1d1d1f] dark:text-white">KylinTattoo2026!</code> 或直接注册个人邮箱。
+              <span className="font-semibold text-[#c5a059] block mb-1">
+                {isZh ? 'Saleor Core JWT 凭据提示：' : 'Saleor Core JWT Demo Note:'}
+              </span>
+              {isZh ? (
+                <>
+                  可用管理员账户直接体验：<code className="text-xs font-mono font-semibold text-[#1d1d1f] dark:text-white">admin@kylintattoo.com</code> / 密码：<code className="text-xs font-mono font-semibold text-[#1d1d1f] dark:text-white">KylinTattoo2026!</code> 或直接注册个人邮箱。
+                </>
+              ) : (
+                <>
+                  Try with demo admin: <code className="text-xs font-mono font-semibold text-[#1d1d1f] dark:text-white">admin@kylintattoo.com</code> / Password: <code className="text-xs font-mono font-semibold text-[#1d1d1f] dark:text-white">KylinTattoo2026!</code> or register with your studio email.
+                </>
+              )}
             </div>
           </div>
         ) : (

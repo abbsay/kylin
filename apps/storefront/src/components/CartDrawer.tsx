@@ -1,6 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from '@tanstack/react-router';
 import { useStore } from '../lib/StoreContext';
+import { INITIAL_PRODUCTS } from '../lib/catalog';
+import { STATIC_HARDWARE_PARTS } from './VirtualPartsList';
 import NumberFlow from '@number-flow/react';
 import { X, Trash2, Plus, Minus, ArrowRight, ShoppingBag } from 'lucide-react';
 
@@ -63,55 +66,77 @@ export const CartDrawer: React.FC = () => {
                   <ShoppingBag className="w-6 h-6 opacity-40" />
                 </div>
                 <p className="text-sm font-medium text-[#86868b]">{t('cart.empty')}</p>
-                <p className="text-xs text-[#86868b]/70 mt-1">Add machines, precision cams or motors to begin.</p>
+                <p className="text-xs text-[#86868b]/70 mt-1">
+                  {isZh ? '添加纹身机、偏心轮或马达配件以开始。' : 'Add machines, precision cams or motors to begin.'}
+                </p>
               </div>
             ) : (
-              cart.map(item => (
-                <div key={item.variantId} className="py-4.5 flex gap-4 items-center">
-                  <img
-                    src={item.imageUrl}
-                    alt={item.productName}
-                    className="w-16 h-16 rounded-2xl object-cover bg-neutral-100 dark:bg-neutral-800 border border-black/5 dark:border-white/10 shrink-0"
-                  />
-                  <div className="flex-1 min-w-0">
-                    <h4 className="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] truncate">
-                      {item.productName}
-                    </h4>
-                    <p className="text-[11px] text-[#86868b] truncate mt-0.5">{item.variantName}</p>
-                    <div className="text-sm font-mono font-bold text-[#c5a059] mt-1">
-                      <NumberFlow
-                        value={item.price}
-                        format={{ style: 'currency', currency: 'USD' }}
-                      />
+              cart.map(item => {
+                const matchedProduct = INITIAL_PRODUCTS.find(p => p.slug === item.productSlug);
+                const matchedPart = STATIC_HARDWARE_PARTS.find(
+                  p => `part-${p.id}` === item.productSlug || p.sku === item.sku || p.saleorVariantId === item.variantId
+                );
+                const matchedVariant = matchedProduct?.variants.find(
+                  v => v.id === item.variantId || (item.sku && v.sku === item.sku)
+                );
+                const displayProductName = matchedProduct
+                  ? (isZh ? matchedProduct.nameZh : matchedProduct.name)
+                  : matchedPart
+                  ? (isZh ? matchedPart.nameZh : matchedPart.nameEn)
+                  : (isZh ? item.productName : item.productName.replace(/[一-龥]/g, '').trim());
+                const displayVariantName = isZh
+                  ? (matchedVariant?.nameZh || item.variantName)
+                  : (matchedVariant?.name || item.variantName.replace(/\s*\([^)]*[一-龥]+[^)]*\)/g, '').replace(/[一-龥]/g, '').trim());
+
+                return (
+                  <div key={item.variantId} className="py-4.5 flex gap-4 items-center">
+                    <img
+                      src={item.imageUrl}
+                      alt={displayProductName}
+                      className="w-16 h-16 rounded-2xl object-cover bg-neutral-100 dark:bg-neutral-800 border border-black/5 dark:border-white/10 shrink-0"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] truncate">
+                        {displayProductName}
+                      </h4>
+                      <p className="text-[11px] text-[#86868b] truncate mt-0.5">{displayVariantName}</p>
+                      <div className="text-sm font-mono font-bold text-[#c5a059] mt-1">
+                        <NumberFlow
+                          value={item.price}
+                          format={{ style: 'currency', currency: 'USD' }}
+                        />
+                      </div>
                     </div>
-                  </div>
 
-                  {/* Quantity controls */}
-                  <div className="flex items-center gap-2 border border-black/10 dark:border-white/10 rounded-full px-2.5 py-1 bg-black/[0.02] dark:bg-white/[0.03]">
+                    {/* Quantity controls */}
+                    <div className="flex items-center gap-2 border border-black/10 dark:border-white/10 rounded-full px-2.5 py-1 bg-black/[0.02] dark:bg-white/[0.03]">
+                      <button
+                        onClick={() => updateQty(item.variantId, -1)}
+                        className="apple-btn text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-white transition-colors"
+                        aria-label="Decrease quantity"
+                      >
+                        <Minus className="w-3 h-3" />
+                      </button>
+                      <span className="text-xs font-mono font-bold tabular-nums min-w-3 text-center">{item.quantity}</span>
+                      <button
+                        onClick={() => updateQty(item.variantId, 1)}
+                        className="apple-btn text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-white transition-colors"
+                        aria-label="Increase quantity"
+                      >
+                        <Plus className="w-3 h-3" />
+                      </button>
+                    </div>
+
                     <button
-                      onClick={() => updateQty(item.variantId, -1)}
-                      className="apple-btn text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-white transition-colors"
+                      onClick={() => removeFromCart(item.variantId)}
+                      className="apple-btn text-[#86868b] hover:text-red-500 p-1.5 transition-colors rounded-lg hover:bg-red-500/10"
+                      title={isZh ? '移除商品' : 'Remove item'}
                     >
-                      <Minus className="w-3 h-3" />
-                    </button>
-                    <span className="text-xs font-mono font-bold tabular-nums min-w-3 text-center">{item.quantity}</span>
-                    <button
-                      onClick={() => updateQty(item.variantId, 1)}
-                      className="apple-btn text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-white transition-colors"
-                    >
-                      <Plus className="w-3 h-3" />
+                      <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
-
-                  <button
-                    onClick={() => removeFromCart(item.variantId)}
-                    className="apple-btn text-[#86868b] hover:text-red-500 p-1.5 transition-colors rounded-lg hover:bg-red-500/10"
-                    title="Remove item"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-              ))
+                );
+              })
             )}
           </div>
 
@@ -129,16 +154,25 @@ export const CartDrawer: React.FC = () => {
               </div>
               <p className="text-[11px] text-[#86868b] leading-relaxed">{t('cart.freeShippingNote')}</p>
 
-              <button
-                onClick={() => {
-                  setIsCartOpen(false);
-                  setIsCheckoutOpen(true);
-                }}
-                className="apple-btn w-full py-3.5 rounded-full bg-[#1d1d1f] text-white dark:bg-white dark:text-[#1d1d1f] text-xs font-semibold hover:opacity-95 transition-all shadow-md flex items-center justify-center gap-2 uppercase tracking-wider"
-              >
-                <span>{t('cart.checkout')}</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  onClick={() => {
+                    setIsCartOpen(false);
+                    setIsCheckoutOpen(true);
+                  }}
+                  className="apple-btn py-3.5 rounded-full bg-black/5 dark:bg-white/10 text-[#1d1d1f] dark:text-[#f5f5f7] text-xs font-semibold hover:bg-black/10 dark:hover:bg-white/15 transition-all text-center"
+                >
+                  {isZh ? '快速弹窗' : 'Quick Modal'}
+                </button>
+                <Link
+                  to="/checkout"
+                  onClick={() => setIsCartOpen(false)}
+                  className="apple-btn py-3.5 rounded-full bg-[#1d1d1f] text-white dark:bg-white dark:text-[#1d1d1f] text-xs font-semibold hover:opacity-95 transition-all shadow-md flex items-center justify-center gap-1.5 uppercase tracking-wider"
+                >
+                  <span>{t('cart.checkout')}</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
             </div>
           )}
         </div>

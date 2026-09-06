@@ -101,11 +101,15 @@ export const SpecsMatrix: React.FC<Props> = ({ products }) => {
       }),
       columnHelper.accessor('material', {
         header: () => <span className="tracking-wider whitespace-nowrap">{t('compare.colMaterial')}</span>,
-        cell: info => (
-          <span className="text-xs text-[#6e6e73] dark:text-[#a1a1a6] font-medium whitespace-nowrap min-w-[140px] inline-block">
-            {info.getValue()}
-          </span>
-        ),
+        cell: info => {
+          const val = info.getValue();
+          const display = isZh ? val : val.replace(/\s*\([^)]*[一-龥]+[^)]*\)/g, '').trim();
+          return (
+            <span className="text-xs text-[#6e6e73] dark:text-[#a1a1a6] font-medium whitespace-nowrap min-w-[140px] inline-block">
+              {display}
+            </span>
+          );
+        },
       }),
       columnHelper.accessor('weight', {
         header: () => <span className="tracking-wider whitespace-nowrap">{t('compare.colWeight')}</span>,

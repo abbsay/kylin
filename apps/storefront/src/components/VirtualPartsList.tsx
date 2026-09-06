@@ -1,10 +1,12 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { useStore } from '../lib/StoreContext';
+import { useQuery } from '@tanstack/react-query';
+import { productsQueryOptions } from '../lib/queryClient';
 import { Wrench, Plus, Check, Search } from 'lucide-react';
 
-interface PartItem {
+export interface PartItem {
   id: string;
   saleorVariantId: string;
   sku: string;
@@ -17,7 +19,7 @@ interface PartItem {
   imageUrl: string;
 }
 
-const HARDWARE_PARTS: PartItem[] = [
+export const STATIC_HARDWARE_PARTS: PartItem[] = [
   {
     id: 'cam-35',
     saleorVariantId: 'UHJvZHVjdFZhcmlhbnQ6MTI=',
@@ -28,7 +30,7 @@ const HARDWARE_PARTS: PartItem[] = [
     price: 38.0,
     specs: 'Stroke: 3.5mm • Weight: 6.2g',
     compatibility: 'Kylin E30 / BL1 / Faulhaber 2610',
-    imageUrl: 'https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?w=300&q=80',
+    imageUrl: 'http://localhost:8002/media/products/cam_bearing.png',
   },
   {
     id: 'cam-42',
@@ -40,7 +42,7 @@ const HARDWARE_PARTS: PartItem[] = [
     price: 42.0,
     specs: 'Stroke: 4.2mm • Heavy Duty Bearing',
     compatibility: 'Kylin E30 / Billow RCA',
-    imageUrl: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=300&q=80',
+    imageUrl: 'http://localhost:8002/media/products/cam_bearing.png',
   },
   {
     id: 'cam-50',
@@ -52,7 +54,7 @@ const HARDWARE_PARTS: PartItem[] = [
     price: 45.0,
     specs: 'Stroke: 5.0mm • Japanese NMB Bearing',
     compatibility: 'Kylin T7max / E30 Pro',
-    imageUrl: 'https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?w=300&q=80',
+    imageUrl: 'http://localhost:8002/media/products/cam_bearing.png',
   },
   {
     id: 'motor-faulhaber-2610',
@@ -64,7 +66,7 @@ const HARDWARE_PARTS: PartItem[] = [
     price: 135.0,
     specs: '12V 10,800 RPM • Low Vibration',
     compatibility: 'Kylin Faulhaber 2610 Direct Replacement',
-    imageUrl: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=300&q=80',
+    imageUrl: 'http://localhost:8002/media/products/needle_cartridge.jpg',
   },
   {
     id: 'motor-mabuchi-pro',
@@ -76,7 +78,7 @@ const HARDWARE_PARTS: PartItem[] = [
     price: 68.0,
     specs: '10V 9,500 RPM • High Efficiency',
     compatibility: 'Universal Kylin Rotary Pen',
-    imageUrl: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=300&q=80',
+    imageUrl: 'http://localhost:8002/media/products/needle_cartridge.jpg',
   },
   {
     id: 'battery-t7-pack',
@@ -88,7 +90,7 @@ const HARDWARE_PARTS: PartItem[] = [
     price: 59.0,
     specs: 'USB-C Fast Charging • OLED Voltage DSP',
     compatibility: 'Kylin T7max Wireless Pen',
-    imageUrl: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=300&q=80',
+    imageUrl: 'http://localhost:8002/media/products/kylin_smart_power_battery.jpg',
   },
   {
     id: 'battery-clip-dock',
@@ -100,7 +102,7 @@ const HARDWARE_PARTS: PartItem[] = [
     price: 75.0,
     specs: 'Input: PD 30W • Dual Smart Channels',
     compatibility: 'All Kylin Modular Battery Packs',
-    imageUrl: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=300&q=80',
+    imageUrl: 'http://localhost:8002/media/products/dock_flight_case.jpg',
   },
   {
     id: 'rca-gold-cable',
@@ -112,7 +114,7 @@ const HARDWARE_PARTS: PartItem[] = [
     price: 28.0,
     specs: 'Zero Voltage Drop • Pure OFC Copper',
     compatibility: 'Universal RCA Tattoo Machines',
-    imageUrl: 'https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?w=300&q=80',
+    imageUrl: 'http://localhost:8002/media/products/cables_rca.jpg',
   },
   {
     id: 'brass-spring-kit',
@@ -124,7 +126,7 @@ const HARDWARE_PARTS: PartItem[] = [
     price: 32.0,
     specs: '0.45mm / 0.50mm thickness precision cut',
     compatibility: 'Kylin R07 / 20128 / Black Ghost',
-    imageUrl: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=300&q=80',
+    imageUrl: 'http://localhost:8002/media/products/cables_rca.jpg',
   },
   {
     id: 'brass-binding-posts',
@@ -136,7 +138,7 @@ const HARDWARE_PARTS: PartItem[] = [
     price: 26.0,
     specs: '999 Sterling Silver Contact Screw',
     compatibility: 'Classic Coil Tattoo Machines',
-    imageUrl: 'https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?w=300&q=80',
+    imageUrl: 'http://localhost:8002/media/products/cables_rca.jpg',
   },
 ];
 
@@ -149,7 +151,44 @@ export const VirtualPartsList: React.FC = () => {
 
   const isZh = i18n.language.startsWith('zh');
 
-  const filteredParts = HARDWARE_PARTS.filter(p => {
+  // Query live Saleor GraphQL catalog
+  const { data: saleorProducts } = useQuery(productsQueryOptions);
+
+  // Dynamically resolve real live variant IDs from Saleor GraphQL catalog by matching SKU
+  const resolvedParts = useMemo<PartItem[]>(() => {
+    if (!saleorProducts || saleorProducts.length === 0) {
+      return STATIC_HARDWARE_PARTS;
+    }
+
+    // Create a map of SKU -> real GraphQL Variant
+    const skuMap = new Map<string, { id: string; price: number; imageUrl?: string }>();
+    saleorProducts.forEach(prod => {
+      prod.variants.forEach(v => {
+        if (v.sku) {
+          skuMap.set(v.sku, {
+            id: v.id,
+            price: v.price,
+            imageUrl: v.imageUrl,
+          });
+        }
+      });
+    });
+
+    return STATIC_HARDWARE_PARTS.map(part => {
+      const liveVariant = skuMap.get(part.sku);
+      if (liveVariant) {
+        return {
+          ...part,
+          saleorVariantId: liveVariant.id, // Dynamically bound verified GraphQL ID
+          price: liveVariant.price > 0 ? liveVariant.price : part.price,
+          imageUrl: liveVariant.imageUrl || part.imageUrl,
+        };
+      }
+      return part;
+    });
+  }, [saleorProducts]);
+
+  const filteredParts = resolvedParts.filter(p => {
     const matchesSearch =
       p.nameEn.toLowerCase().includes(search.toLowerCase()) ||
       p.nameZh.includes(search) ||
@@ -230,7 +269,7 @@ export const VirtualPartsList: React.FC = () => {
                     : 'text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]'
                 }`}
               >
-                {cat}
+                {isZh ? { All: '全部', Cams: '偏心轮', Motors: '马达核心', Power: '电池电源', Cables: '线材配件' }[cat] : cat}
               </button>
             ))}
           </div>
@@ -280,11 +319,11 @@ export const VirtualPartsList: React.FC = () => {
                           {isZh ? part.nameZh : part.nameEn}
                         </span>
                         <span className="text-[9px] px-2 py-0.5 rounded-full bg-[#c5a059]/15 text-[#c5a059] font-mono font-bold shrink-0">
-                          {part.category}
+                          {isZh ? { Cams: '偏心轮', Motors: '马达', Power: '电源', Cables: '线材' }[part.category] || part.category : part.category}
                         </span>
                       </div>
                       <p className="text-[11px] text-[#6e6e73] dark:text-[#86868b] truncate mt-1">
-                        <span className="font-mono text-[#1d1d1f] dark:text-[#f5f5f7] font-medium">{part.specs}</span> • 适配: {part.compatibility}
+                        <span className="font-mono text-[#1d1d1f] dark:text-[#f5f5f7] font-medium">{part.specs}</span> • {isZh ? '适配: ' : 'Compatible: '}{part.compatibility}
                       </p>
                     </div>
                   </div>

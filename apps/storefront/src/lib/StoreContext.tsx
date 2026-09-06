@@ -1,7 +1,17 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { CartItem } from '../types';
 import {
+  useCartQuery,
+  useAddToCartMutation,
+  updateCartItemQtyInCache,
+  removeCartItemFromCache,
+  clearCartInCache,
+  AddToCartVariables,
+} from './cartQuery';
+import {
   SaleorUser,
+
   SaleorAddress,
   AddressInputData,
   getStoredToken,
@@ -22,7 +32,8 @@ interface StoreContextType {
   toggleTheme: () => void;
   currency: 'USD';
   cart: CartItem[];
-  addToCart: (item: CartItem) => void;
+  totalItems: number;
+  addToCart: (item: CartItem, options?: { openDrawer?: boolean; simulateError?: boolean }) => Promise<void> | void;
   removeFromCart: (variantId: string) => void;
   updateQty: (variantId: string, delta: number) => void;
   clearCart: () => void;
@@ -50,9 +61,12 @@ interface StoreContextType {
 const StoreContext = createContext<StoreContextType | null>(null);
 
 export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const queryClient = useQueryClient();
+  const { cart, totalItems, cartTotal } = useCartQuery();
+  const addToCartMutation = useAddToCartMutation();
+
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
   const currency: 'USD' = 'USD';
-  const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isAccountOpen, setIsAccountOpen] = useState(false);
@@ -154,40 +168,27 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
   };
 
-  const addToCart = (item: CartItem) => {
-    setCart(prev => {
-      const existing = prev.find(i => i.variantId === item.variantId);
-      if (existing) {
-        return prev.map(i =>
-          i.variantId === item.variantId ? { ...i, quantity: i.quantity + item.quantity } : i
-        );
-      }
-      return [...prev, item];
+  const addToCart = (item: CartItem, options?: { openDrawer?: boolean; simulateError?: boolean }) => {
+    addToCartMutation.mutate({
+      item,
+      simulateError: options?.simulateError,
     });
-    setIsCartOpen(true);
+    if (options?.openDrawer) {
+      setIsCartOpen(true);
+    }
   };
 
   const removeFromCart = (variantId: string) => {
-    setCart(prev => prev.filter(i => i.variantId !== variantId));
+    removeCartItemFromCache(queryClient, variantId);
   };
 
   const updateQty = (variantId: string, delta: number) => {
-    setCart(prev =>
-      prev
-        .map(i => {
-          if (i.variantId === variantId) {
-            const newQty = i.quantity + delta;
-            return newQty > 0 ? { ...i, quantity: newQty } : null;
-          }
-          return i;
-        })
-        .filter(Boolean) as CartItem[]
-    );
+    updateCartItemQtyInCache(queryClient, variantId, delta);
   };
 
-  const clearCart = () => setCart([]);
-
-  const cartTotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const clearCart = () => {
+    clearCartInCache(queryClient);
+  };
 
   return (
     <StoreContext.Provider
@@ -196,6 +197,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         toggleTheme,
         currency,
         cart,
+        totalItems,
         addToCart,
         removeFromCart,
         updateQty,

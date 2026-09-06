@@ -598,13 +598,33 @@ export async function saleorCreateCheckout(
     }
   `;
 
-  // Map country name to 2-letter ISO code if needed
-  let countryCode = 'US';
-  if (input.shippingAddress.country === 'Canada' || input.shippingAddress.country === 'CA') countryCode = 'CA';
-  else if (input.shippingAddress.country === 'United Kingdom' || input.shippingAddress.country === 'GB') countryCode = 'GB';
-  else if (input.shippingAddress.country === 'Germany' || input.shippingAddress.country === 'DE') countryCode = 'DE';
-  else if (input.shippingAddress.country === 'Australia' || input.shippingAddress.country === 'AU') countryCode = 'AU';
-  else if (input.shippingAddress.country === 'China' || input.shippingAddress.country === 'CN') countryCode = 'CN';
+  // Map country name or ISO code to 2-letter uppercase ISO-3166 code
+  const rawCountry = (input.shippingAddress.country || 'US').trim().toUpperCase();
+  const countryCodeMap: Record<string, string> = {
+    'UNITED STATES': 'US',
+    'US': 'US',
+    'USA': 'US',
+    'CANADA': 'CA',
+    'CA': 'CA',
+    'UNITED KINGDOM': 'GB',
+    'UK': 'GB',
+    'GB': 'GB',
+    'GERMANY': 'DE',
+    'DE': 'DE',
+    'AUSTRALIA': 'AU',
+    'AU': 'AU',
+    'CHINA': 'CN',
+    'CN': 'CN',
+    'JAPAN': 'JP',
+    'JP': 'JP',
+    'FRANCE': 'FR',
+    'FR': 'FR',
+    'ITALY': 'IT',
+    'IT': 'IT',
+    'SPAIN': 'ES',
+    'ES': 'ES',
+  };
+  const countryCode = countryCodeMap[rawCountry] || (rawCountry.length === 2 ? rawCountry : 'US');
 
   const lines = input.lines.map(line => ({
     variantId: line.variantId,
@@ -612,14 +632,14 @@ export async function saleorCreateCheckout(
   }));
 
   const address = {
-    firstName: input.shippingAddress.firstName || 'Artist',
-    lastName: input.shippingAddress.lastName || 'Studio',
-    streetAddress1: input.shippingAddress.streetAddress1,
-    city: input.shippingAddress.city,
+    firstName: input.shippingAddress.firstName?.trim() || '',
+    lastName: input.shippingAddress.lastName?.trim() || '',
+    streetAddress1: input.shippingAddress.streetAddress1?.trim() || '',
+    city: input.shippingAddress.city?.trim() || '',
     country: countryCode,
-    postalCode: input.shippingAddress.postalCode || '90001',
-    countryArea: input.shippingAddress.countryArea || (countryCode === 'US' ? 'CA' : ''),
-    phone: input.shippingAddress.phone || '+15550199',
+    postalCode: input.shippingAddress.postalCode?.trim() || '',
+    countryArea: input.shippingAddress.countryArea?.trim() || '',
+    phone: input.shippingAddress.phone?.trim() || '',
   };
 
   const variables = {
@@ -728,11 +748,12 @@ export async function saleorUpdateDeliveryMethod(
 
 export async function saleorCompleteCheckout(
   checkoutId: string,
-  userToken?: string | null
+  userToken?: string | null,
+  metadata?: Array<{ key: string; value: string }>
 ): Promise<SaleorOrderResult> {
   const query = `
-    mutation CompleteCheckout($id: ID!) {
-      checkoutComplete(id: $id) {
+    mutation CompleteCheckout($id: ID!, $metadata: [MetadataInput!]) {
+      checkoutComplete(id: $id, metadata: $metadata) {
         order {
           id
           number
@@ -767,10 +788,15 @@ export async function saleorCompleteCheckout(
     headers['Authorization'] = `Bearer ${userToken}`;
   }
 
+  const variables: Record<string, any> = { id: checkoutId };
+  if (metadata && metadata.length > 0) {
+    variables.metadata = metadata;
+  }
+
   const res = await fetch(SALEOR_GRAPHQL_ENDPOINT, {
     method: 'POST',
     headers,
-    body: JSON.stringify({ query, variables: { id: checkoutId } }),
+    body: JSON.stringify({ query, variables }),
   });
 
   const data = await res.json();

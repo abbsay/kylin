@@ -74,15 +74,18 @@ export const CheckoutModal: React.FC = () => {
       phone: '',
       address: currentUser?.defaultShippingAddress?.streetAddress1 || '',
       city: currentUser?.defaultShippingAddress?.city || '',
-      countryArea: 'CA',
-      postalCode: '90001',
+      countryArea: currentUser?.defaultShippingAddress?.countryArea || '',
+      postalCode: currentUser?.defaultShippingAddress?.postalCode || '',
       country: currentUser?.defaultShippingAddress?.country?.country || 'United States',
+    },
+    validators: {
+      onChange: checkoutSchema,
     },
     onSubmit: async ({ value }) => {
       setCheckoutError(null);
-      const nameParts = value.fullName.split(' ');
-      const firstName = nameParts[0] || 'Artist';
-      const lastName = nameParts.slice(1).join(' ') || 'Studio';
+      const nameParts = value.fullName.trim().split(/\s+/);
+      const firstName = nameParts[0] || '';
+      const lastName = nameParts.slice(1).join(' ') || '';
 
       try {
         const result = await saleorCreateCheckout(
@@ -145,7 +148,13 @@ export const CheckoutModal: React.FC = () => {
     setIsCompletingOrder(true);
     setCheckoutError(null);
     try {
-      const order = await saleorCompleteCheckout(checkoutId, authToken);
+      const metadata = [
+        { key: 'payment_method', value: paymentMethod },
+        { key: 'settlement_type', value: paymentMethod === 'card_terms' ? 'Net-30 B2B Commercial Dispatch' : 'International Wire TT Transfer' },
+        { key: 'authorization_timestamp', value: new Date().toISOString() },
+        { key: 'client_platform', value: 'Kylin Tattoo Official Storefront SPA' },
+      ];
+      const order = await saleorCompleteCheckout(checkoutId, authToken, metadata);
       setCompletedOrder(order);
       clearCart();
       await refreshUserData();
@@ -473,6 +482,9 @@ export const CheckoutModal: React.FC = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <form.Field
                     name="city"
+                    validators={{
+                      onChange: z.string().min(2, 'City is required'),
+                    }}
                     children={field => (
                       <div>
                         <label className="text-[11px] font-bold text-[#86868b] uppercase tracking-wider block mb-1">
@@ -484,12 +496,18 @@ export const CheckoutModal: React.FC = () => {
                           placeholder="Los Angeles"
                           className="w-full text-xs px-3.5 py-2.5 rounded-xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 focus:outline-none focus:border-[#c5a059] focus:ring-2 focus:ring-[#c5a059]/20 transition-all text-[#1d1d1f] dark:text-[#f5f5f7]"
                         />
+                        {field.state.meta.errors?.[0] && (
+                          <p className="text-[10px] text-red-500 mt-1">{String(field.state.meta.errors[0])}</p>
+                        )}
                       </div>
                     )}
                   />
 
                   <form.Field
                     name="country"
+                    validators={{
+                      onChange: z.string().min(2, 'Country is required'),
+                    }}
                     children={field => (
                       <div>
                         <label className="text-[11px] font-bold text-[#86868b] uppercase tracking-wider block mb-1">
@@ -506,6 +524,9 @@ export const CheckoutModal: React.FC = () => {
                           <option value="Germany">Germany</option>
                           <option value="Australia">Australia</option>
                         </select>
+                        {field.state.meta.errors?.[0] && (
+                          <p className="text-[10px] text-red-500 mt-1">{String(field.state.meta.errors[0])}</p>
+                        )}
                       </div>
                     )}
                   />

@@ -198,20 +198,25 @@ export const Catalog: React.FC<Props> = ({ products }) => {
                         {t('catalog.quickBuy')}:
                       </span>
                       <div className="flex flex-wrap gap-1.5">
-                        {product.variants.map(v => (
-                          <button
-                            key={v.id}
-                            type="button"
-                            onClick={e => handleSelectVariant(product.slug, v.id, e)}
-                            className={`apple-btn text-xs px-3 py-1.5 rounded-xl transition-all border ${
-                              selectedVariantId === v.id
-                                ? 'bg-[#c5a059]/15 border-[#c5a059] text-[#c5a059] font-bold shadow-xs'
-                                : 'border-black/10 dark:border-white/10 text-[#6e6e73] dark:text-[#86868b] hover:border-black/25 dark:hover:border-white/25 hover:text-[#1d1d1f] dark:hover:text-white'
-                            }`}
-                          >
-                            {v.name}
-                          </button>
-                        ))}
+                        {product.variants.map(v => {
+                          const variantLabel = isZh
+                            ? v.name
+                            : v.name.replace(/\s*\([^)]*[一-龥]+[^)]*\)/g, '').trim();
+                          return (
+                            <button
+                              key={v.id}
+                              type="button"
+                              onClick={e => handleSelectVariant(product.slug, v.id, e)}
+                              className={`apple-btn text-xs px-3 py-1.5 rounded-xl transition-all border ${
+                                selectedVariantId === v.id
+                                  ? 'bg-[#c5a059]/15 border-[#c5a059] text-[#c5a059] font-bold shadow-xs'
+                                  : 'border-black/10 dark:border-white/10 text-[#6e6e73] dark:text-[#86868b] hover:border-black/25 dark:hover:border-white/25 hover:text-[#1d1d1f] dark:hover:text-white'
+                              }`}
+                            >
+                              {variantLabel}
+                            </button>
+                          );
+                        })}
                       </div>
                     </div>
                   )}

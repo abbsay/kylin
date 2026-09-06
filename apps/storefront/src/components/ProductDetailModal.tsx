@@ -155,6 +155,9 @@ export const ProductDetailModal: React.FC<Props> = ({ product, isOpen, onClose }
                 <div className="grid grid-cols-1 gap-2">
                   {product.variants.map(v => {
                     const isSelected = currentVariant.id === v.id;
+                    const variantLabel = isZh
+                      ? v.name
+                      : v.name.replace(/\s*\([^)]*[一-龥]+[^)]*\)/g, '').trim();
                     return (
                       <button
                         key={v.id}
@@ -171,7 +174,7 @@ export const ProductDetailModal: React.FC<Props> = ({ product, isOpen, onClose }
                           }`}>
                             {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                           </div>
-                          <span>{v.name}</span>
+                          <span>{variantLabel}</span>
                         </div>
                         <span className="font-mono font-bold">${v.price.toFixed(2)}</span>
                       </button>

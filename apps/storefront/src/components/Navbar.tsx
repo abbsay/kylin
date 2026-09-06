@@ -4,6 +4,8 @@ import { Link } from '@tanstack/react-router';
 import { useStore } from '../lib/StoreContext';
 import { ShoppingBag, Sun, Moon, User, Menu, X, ChevronRight } from 'lucide-react';
 import { LanguageDropdown } from './LanguageDropdown';
+import { MiniCartBadge } from './MiniCartBadge';
+
 
 export const Navbar: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -107,12 +109,9 @@ export const Navbar: React.FC = () => {
               title="Shopping Bag"
             >
               <ShoppingBag className="w-4 h-4" />
-              {totalItems > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 bg-[#c5a059] text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
-                  {totalItems}
-                </span>
-              )}
+              <MiniCartBadge count={totalItems} />
             </button>
+
 
             {/* Mobile Menu Hamburger (Visible on small screens) */}
             <button
@@ -155,7 +154,11 @@ export const Navbar: React.FC = () => {
               <p className="font-semibold text-[#1d1d1f] dark:text-[#f5f5f7]">
                 Kylin Tattoo Studio Equipment
               </p>
-              <p>Free Shipping. 全球2-4周到货，中国直发。</p>
+              <p>
+                {isZh
+                  ? 'Free Shipping. 全球2-4周到货，中国直发。'
+                  : 'Free Shipping. Worldwide delivery in 2-4 weeks, direct from China.'}
+              </p>
             </div>
           </div>
         )}

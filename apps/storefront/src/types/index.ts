@@ -1,12 +1,14 @@
 export interface ProductVariant {
   id: string;
   name: string;
+  nameZh?: string;
   sku: string;
   price: number;
   currency: string;
   stroke?: string;
   color?: string;
   tuning?: string;
+  tuningZh?: string;
   imageUrl?: string;
 }
 

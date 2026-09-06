@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { useStore } from '../lib/StoreContext';
+import { useQuery } from '@tanstack/react-query';
+import { productsQueryOptions } from '../lib/queryClient';
 import { AuthView } from '../components/AuthView';
 import {
   Shield,
@@ -85,6 +87,29 @@ const QUICK_PARTS: QuickPartItem[] = [
 
 export const AccountPage: React.FC = () => {
   const { t, i18n } = useTranslation();
+  const { data: saleorProducts } = useQuery(productsQueryOptions);
+
+  const dynamicQuickParts = useMemo<QuickPartItem[]>(() => {
+    if (!saleorProducts || saleorProducts.length === 0) return QUICK_PARTS;
+    const skuMap = new Map<string, { id: string; price: number; imageUrl?: string }>();
+    saleorProducts.forEach(p => {
+      p.variants.forEach(v => {
+        if (v.sku) skuMap.set(v.sku, { id: v.id, price: v.price, imageUrl: v.imageUrl });
+      });
+    });
+    return QUICK_PARTS.map(part => {
+      const live = skuMap.get(part.sku);
+      if (live) {
+        return {
+          ...part,
+          saleorVariantId: live.id,
+          price: live.price > 0 ? live.price : part.price,
+          imageUrl: live.imageUrl || part.imageUrl,
+        };
+      }
+      return part;
+    });
+  }, [saleorProducts]);
   const {
     currentUser,
     logoutUser,
@@ -130,7 +155,7 @@ export const AccountPage: React.FC = () => {
     streetAddress1: '',
     streetAddress2: '',
     city: '',
-    countryArea: 'CA',
+    countryArea: '',
     postalCode: '',
     country: 'US',
     phone: '',
@@ -1061,7 +1086,7 @@ export const AccountPage: React.FC = () => {
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                      {QUICK_PARTS.map(part => {
+                      {dynamicQuickParts.map(part => {
                         const isAdded = addedPartId === part.id;
                         return (
                           <div

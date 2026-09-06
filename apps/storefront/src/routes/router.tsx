@@ -4,6 +4,7 @@ import { App } from '../App';
 import { AccountPage } from '../pages/AccountPage';
 import { ProductDetailPage } from '../pages/ProductDetailPage';
 import { AuthPage } from '../pages/AuthPage';
+import { CheckoutPage } from '../pages/CheckoutPage';
 import { queryClient, productsQueryOptions } from '../lib/queryClient';
 
 // Root route with typed queryClient context
@@ -50,6 +51,13 @@ export const productRoute = createRoute({
   component: ProductDetailPage,
 });
 
+// Dedicated full-page Checkout route
+export const checkoutRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/checkout',
+  component: CheckoutPage,
+});
+
 // Create the router configuration tree
 const routeTree = rootRoute.addChildren([
   indexRoute,
@@ -57,6 +65,7 @@ const routeTree = rootRoute.addChildren([
   loginRoute,
   registerRoute,
   productRoute,
+  checkoutRoute,
 ]);
 
 export const router = createRouter({
