@@ -7,7 +7,10 @@ Kylin Tattoo 电商商品种子注入脚本 (Seed Script)
 import os
 import sys
 
-SALEOR_ROOT = "/Volumes/samsung2tb980pro/project/KylinTattoo/apps/saleor-core"
+SALEOR_ROOT = os.environ.get(
+    "SALEOR_ROOT",
+    "/app" if os.path.exists("/app/saleor") else os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "apps/saleor-core")
+)
 if SALEOR_ROOT not in sys.path:
     sys.path.insert(0, SALEOR_ROOT)
 

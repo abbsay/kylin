@@ -8,7 +8,10 @@ Kylin Tattoo 官方商品媒体与变体专属颜色高清大图注入脚本
 import os
 import sys
 
-SALEOR_ROOT = "/Volumes/samsung2tb980pro/project/KylinTattoo/apps/saleor-core"
+SALEOR_ROOT = os.environ.get(
+    "SALEOR_ROOT",
+    "/app" if os.path.exists("/app/saleor") else os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "apps/saleor-core")
+)
 if SALEOR_ROOT not in sys.path:
     sys.path.insert(0, SALEOR_ROOT)
 
