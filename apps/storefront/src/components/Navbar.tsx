@@ -40,17 +40,17 @@ export const Navbar: React.FC = () => {
         className="w-full h-11 bg-white/80 dark:bg-[#161617]/80 backdrop-blur-2xl backdrop-saturate-180 border-b border-black/[0.08] dark:border-white/[0.08] transition-colors duration-200"
       >
         <div className="max-w-[1024px] mx-auto h-full px-4 sm:px-8 flex items-center justify-between">
-          {/* Brand Logo / Kylin Monogram */}
+          {/* Brand Logo / Kylin Official Emblem */}
           <Link
             to="/"
             className="flex items-center gap-2 group cursor-pointer shrink-0"
             aria-label="Kylin Tattoo Home"
           >
-            <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-[#1d1d1f] via-[#c5a059] to-[#fbfbfd] dark:from-[#c5a059] dark:via-[#99732b] dark:to-[#161617] p-[1px] flex items-center justify-center">
-              <div className="w-full h-full bg-white dark:bg-[#000000] rounded-full flex items-center justify-center text-[10px] font-bold text-[#c5a059] group-hover:scale-105 transition-transform">
-                K
-              </div>
-            </div>
+            <img
+              src="/kylin-logo.png"
+              alt="KYLIN TATTOO MACHINES"
+              className="w-7 h-7 rounded-full object-contain group-hover:scale-105 transition-transform drop-shadow-xs ring-1 ring-black/10 dark:ring-white/20 bg-white/20 dark:bg-black/30 p-[1px]"
+            />
             <span className="font-brand font-bold tracking-[0.14em] text-[13px] text-[#1d1d1f] dark:text-[#f5f5f7] group-hover:text-[#c5a059] transition-colors">
               KYLIN
             </span>

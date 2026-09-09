@@ -115,10 +115,12 @@ export const AuthView: React.FC<AuthViewProps> = ({
       {/* 1. Apple Monogram & Brand Masthead */}
       <div className="text-center mb-6">
         <div className="relative inline-block mb-3">
-          <div className="w-14 h-14 rounded-[22%] bg-gradient-to-tr from-[#1d1d1f] via-[#c5a059] to-[#fbfbfd] dark:from-[#c5a059] dark:via-[#f7d995] dark:to-[#8c6f32] p-[2px] shadow-[0_10px_28px_rgba(197,160,89,0.2)] flex items-center justify-center transition-transform hover:scale-105">
-            <div className="w-full h-full bg-white dark:bg-[#000000] rounded-[20%] flex items-center justify-center text-lg font-brand font-bold text-[#c5a059]">
-              K
-            </div>
+          <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-[#1d1d1f] via-[#c5a059] to-[#fbfbfd] dark:from-[#c5a059] dark:via-[#f7d995] dark:to-[#8c6f32] p-[2px] shadow-[0_10px_28px_rgba(197,160,89,0.2)] flex items-center justify-center transition-transform hover:scale-105">
+            <img
+              src="/kylin-logo.png"
+              alt="KYLIN TATTOO MACHINES"
+              className="w-full h-full rounded-full object-contain bg-white dark:bg-[#161617] p-1"
+            />
           </div>
           <span className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-emerald-500 ring-4 ring-[#fbfbfd] dark:ring-[#000000] flex items-center justify-center text-[9px] text-white">
             <Sparkles className="w-2 h-2" />
