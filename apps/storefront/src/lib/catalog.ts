@@ -1,9 +1,22 @@
 import { KylinProduct, ProductVariant } from '../types';
 
 export const SALEOR_GRAPHQL_ENDPOINT =
-  import.meta.env.VITE_SALEOR_API_URL || 'http://localhost:8002/graphql/';
+  import.meta.env.VITE_SALEOR_API_URL || 'https://api.kylintattoo.com/graphql/';
 export const SALEOR_CHANNEL =
   import.meta.env.VITE_SALEOR_CHANNEL || 'default-channel';
+
+export const resolveMediaUrl = (url?: string | null): string => {
+  if (!url) return 'https://api.kylintattoo.com/media/products/e30_raw_titanium.jpg';
+  if (url.includes('localhost:8000') || url.includes('localhost:8002') || url.includes('127.0.0.1:8000') || url.includes('127.0.0.1:8002')) {
+    return url
+      .replace(/http:\/\/localhost:800[02]/g, 'https://api.kylintattoo.com')
+      .replace(/http:\/\/127\.0\.0\.1:800[02]/g, 'https://api.kylintattoo.com');
+  }
+  if (url.startsWith('/')) {
+    return `https://api.kylintattoo.com${url}`;
+  }
+  return url;
+};
 
 export const INITIAL_PRODUCTS: KylinProduct[] = [
   {
@@ -26,18 +39,18 @@ export const INITIAL_PRODUCTS: KylinProduct[] = [
     startingPriceCny: 1850.00,
     badge: 'FLAGSHIP PRECISION',
     badgeZh: '旗舰精工',
-    imageUrl: 'http://localhost:8002/media/products/e30_raw_titanium.jpg',
+    imageUrl: 'https://api.kylintattoo.com/media/products/e30_raw_titanium.jpg',
     media: [
-      { id: 'm-e30-1', url: 'http://localhost:8002/media/products/e30_raw_titanium.jpg', alt: 'Kylin E30 Titanium Raw Finish' },
-      { id: 'm-e30-2', url: 'http://localhost:8002/media/products/e30_matte_black.jpg', alt: 'Kylin E30 Matte Black' },
-      { id: 'm-e30-3', url: 'http://localhost:8002/media/products/e30_space_grey.jpg', alt: 'Kylin E30 Space Grey' },
-      { id: 'm-e30-4', url: 'http://localhost:8002/media/products/e30_royal_gold.jpg', alt: 'Kylin E30 Royal Gold' },
+      { id: 'm-e30-1', url: 'https://api.kylintattoo.com/media/products/e30_raw_titanium.jpg', alt: 'Kylin E30 Titanium Raw Finish' },
+      { id: 'm-e30-2', url: 'https://api.kylintattoo.com/media/products/e30_matte_black.jpg', alt: 'Kylin E30 Matte Black' },
+      { id: 'm-e30-3', url: 'https://api.kylintattoo.com/media/products/e30_space_grey.jpg', alt: 'Kylin E30 Space Grey' },
+      { id: 'm-e30-4', url: 'https://api.kylintattoo.com/media/products/e30_royal_gold.jpg', alt: 'Kylin E30 Royal Gold' },
     ],
     variants: [
-      { id: 'UHJvZHVjdFZhcmlhbnQ6MQ==', name: 'Raw Titanium', nameZh: 'Raw Titanium (钛原色)', sku: 'KYLIN-E30-RAW', price: 260.00, currency: 'USD', stroke: '3.5mm (Universal Standard)', color: 'Raw Titanium', imageUrl: 'http://localhost:8002/media/products/e30_raw_titanium.jpg' },
-      { id: 'UHJvZHVjdFZhcmlhbnQ6Mg==', name: 'Matte Black', nameZh: 'Matte Black (曜石黑)', sku: 'KYLIN-E30-BLK', price: 260.00, currency: 'USD', stroke: '3.5mm (Universal Standard)', color: 'Matte Black', imageUrl: 'http://localhost:8002/media/products/e30_matte_black.jpg' },
-      { id: 'UHJvZHVjdFZhcmlhbnQ6Mw==', name: 'Space Grey', nameZh: 'Space Grey (深空灰)', sku: 'KYLIN-E30-GRY', price: 260.00, currency: 'USD', stroke: '3.5mm (Universal Standard)', color: 'Space Grey', imageUrl: 'http://localhost:8002/media/products/e30_space_grey.jpg' },
-      { id: 'UHJvZHVjdFZhcmlhbnQ6NA==', name: 'Royal Gold', nameZh: 'Royal Gold (皇家金)', sku: 'KYLIN-E30-GLD', price: 275.00, currency: 'USD', stroke: '3.5mm (Universal Standard)', color: 'Royal Gold', imageUrl: 'http://localhost:8002/media/products/e30_royal_gold.jpg' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6MQ==', name: 'Raw Titanium', nameZh: 'Raw Titanium (钛原色)', sku: 'KYLIN-E30-RAW', price: 260.00, currency: 'USD', stroke: '3.5mm (Universal Standard)', color: 'Raw Titanium', imageUrl: 'https://api.kylintattoo.com/media/products/e30_raw_titanium.jpg' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6Mg==', name: 'Matte Black', nameZh: 'Matte Black (曜石黑)', sku: 'KYLIN-E30-BLK', price: 260.00, currency: 'USD', stroke: '3.5mm (Universal Standard)', color: 'Matte Black', imageUrl: 'https://api.kylintattoo.com/media/products/e30_matte_black.jpg' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6Mw==', name: 'Space Grey', nameZh: 'Space Grey (深空灰)', sku: 'KYLIN-E30-GRY', price: 260.00, currency: 'USD', stroke: '3.5mm (Universal Standard)', color: 'Space Grey', imageUrl: 'https://api.kylintattoo.com/media/products/e30_space_grey.jpg' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6NA==', name: 'Royal Gold', nameZh: 'Royal Gold (皇家金)', sku: 'KYLIN-E30-GLD', price: 275.00, currency: 'USD', stroke: '3.5mm (Universal Standard)', color: 'Royal Gold', imageUrl: 'https://api.kylintattoo.com/media/products/e30_royal_gold.jpg' },
     ]
   },
   {
@@ -60,16 +73,16 @@ export const INITIAL_PRODUCTS: KylinProduct[] = [
     startingPriceCny: 980.00,
     badge: 'PORTRAIT FAVORITE',
     badgeZh: '黑灰写实力作',
-    imageUrl: 'http://localhost:8002/media/products/fh26_space_grey.jpg',
+    imageUrl: 'https://api.kylintattoo.com/media/products/fh26_space_grey.jpg',
     media: [
-      { id: 'm-fh26-1', url: 'http://localhost:8002/media/products/fh26_space_grey.jpg', alt: 'Kylin Faulhaber 2610 Space Grey' },
-      { id: 'm-fh26-2', url: 'http://localhost:8002/media/products/fh26_matte_black.jpg', alt: 'Kylin Faulhaber 2610 Matte Black' },
-      { id: 'm-fh26-3', url: 'http://localhost:8002/media/products/fh26_royal_gold.jpg', alt: 'Kylin Faulhaber 2610 Royal Gold' },
+      { id: 'm-fh26-1', url: 'https://api.kylintattoo.com/media/products/fh26_space_grey.jpg', alt: 'Kylin Faulhaber 2610 Space Grey' },
+      { id: 'm-fh26-2', url: 'https://api.kylintattoo.com/media/products/fh26_matte_black.jpg', alt: 'Kylin Faulhaber 2610 Matte Black' },
+      { id: 'm-fh26-3', url: 'https://api.kylintattoo.com/media/products/fh26_royal_gold.jpg', alt: 'Kylin Faulhaber 2610 Royal Gold' },
     ],
     variants: [
-      { id: 'UHJvZHVjdFZhcmlhbnQ6NQ==', name: 'Space Grey', nameZh: 'Space Grey (深空灰)', sku: 'KYLIN-FH26-GRY', price: 138.00, currency: 'USD', stroke: '3.5mm (Universal Standard)', color: 'Space Grey', imageUrl: 'http://localhost:8002/media/products/fh26_space_grey.jpg' },
-      { id: 'UHJvZHVjdFZhcmlhbnQ6Ng==', name: 'Matte Black', nameZh: 'Matte Black (哑光黑)', sku: 'KYLIN-FH26-BLK', price: 138.00, currency: 'USD', stroke: '3.5mm (Universal Standard)', color: 'Matte Black', imageUrl: 'http://localhost:8002/media/products/fh26_matte_black.jpg' },
-      { id: 'UHJvZHVjdFZhcmlhbnQ6Nw==', name: 'Royal Gold', nameZh: 'Royal Gold (荣耀金)', sku: 'KYLIN-FH26-GLD', price: 145.00, currency: 'USD', stroke: '3.5mm (Universal Standard)', color: 'Royal Gold', imageUrl: 'http://localhost:8002/media/products/fh26_royal_gold.jpg' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6NQ==', name: 'Space Grey', nameZh: 'Space Grey (深空灰)', sku: 'KYLIN-FH26-GRY', price: 138.00, currency: 'USD', stroke: '3.5mm (Universal Standard)', color: 'Space Grey', imageUrl: 'https://api.kylintattoo.com/media/products/fh26_space_grey.jpg' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6Ng==', name: 'Matte Black', nameZh: 'Matte Black (哑光黑)', sku: 'KYLIN-FH26-BLK', price: 138.00, currency: 'USD', stroke: '3.5mm (Universal Standard)', color: 'Matte Black', imageUrl: 'https://api.kylintattoo.com/media/products/fh26_matte_black.jpg' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6Nw==', name: 'Royal Gold', nameZh: 'Royal Gold (荣耀金)', sku: 'KYLIN-FH26-GLD', price: 145.00, currency: 'USD', stroke: '3.5mm (Universal Standard)', color: 'Royal Gold', imageUrl: 'https://api.kylintattoo.com/media/products/fh26_royal_gold.jpg' },
     ]
   },
   {
@@ -92,10 +105,10 @@ export const INITIAL_PRODUCTS: KylinProduct[] = [
     startingPriceCny: 2480.00,
     badge: 'WIRELESS DUAL-CELL',
     badgeZh: '双电无线机王',
-    imageUrl: 'http://localhost:8002/media/products/t7max_wireless_real.png',
+    imageUrl: 'https://api.kylintattoo.com/media/products/t7max_wireless_real.png',
     variants: [
-      { id: 'UHJvZHVjdFZhcmlhbnQ6OA==', name: 'Matte Black (Dual Battery)', nameZh: 'Matte Black (曜石黑 - 双电)', sku: 'KYLIN-T7M-BLK', price: 350.00, currency: 'USD', stroke: 'Adjustable', color: 'Matte Black', imageUrl: 'http://localhost:8002/media/products/t7max_wireless_real.png' },
-      { id: 'UHJvZHVjdFZhcmlhbnQ6OQ==', name: 'Space Grey (Dual Battery)', nameZh: 'Space Grey (深空灰 - 双电)', sku: 'KYLIN-T7M-GRY', price: 350.00, currency: 'USD', stroke: 'Adjustable', color: 'Space Grey', imageUrl: 'http://localhost:8002/media/products/t7max_wireless_real.png' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6OA==', name: 'Matte Black (Dual Battery)', nameZh: 'Matte Black (曜石黑 - 双电)', sku: 'KYLIN-T7M-BLK', price: 350.00, currency: 'USD', stroke: 'Adjustable', color: 'Matte Black', imageUrl: 'https://api.kylintattoo.com/media/products/t7max_wireless_real.png' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6OQ==', name: 'Space Grey (Dual Battery)', nameZh: 'Space Grey (深空灰 - 双电)', sku: 'KYLIN-T7M-GRY', price: 350.00, currency: 'USD', stroke: 'Adjustable', color: 'Space Grey', imageUrl: 'https://api.kylintattoo.com/media/products/t7max_wireless_real.png' },
     ]
   },
   {
@@ -118,16 +131,16 @@ export const INITIAL_PRODUCTS: KylinProduct[] = [
     startingPriceCny: 1780.00,
     badge: 'MASTERPIECE COIL',
     badgeZh: '传统失蜡名器',
-    imageUrl: 'http://localhost:8002/media/products/black_ghost_real_blue.jpg',
+    imageUrl: 'https://api.kylintattoo.com/media/products/black_ghost_real_blue.jpg',
     media: [
-      { id: 'm-bg-1', url: 'http://localhost:8002/media/products/black_ghost_real_blue.jpg', alt: 'Kylin Black Ghost Antique Blue Liner' },
-      { id: 'm-bg-2', url: 'http://localhost:8002/media/products/black_ghost_real_macro.jpg', alt: 'Kylin Black Ghost Precision Macro Detail' },
-      { id: 'm-bg-3', url: 'http://localhost:8002/media/products/black_ghost_brass.jpg', alt: 'Kylin Black Ghost Raw Brass Vintage' },
+      { id: 'm-bg-1', url: 'https://api.kylintattoo.com/media/products/black_ghost_real_blue.jpg', alt: 'Kylin Black Ghost Antique Blue Liner' },
+      { id: 'm-bg-2', url: 'https://api.kylintattoo.com/media/products/black_ghost_real_macro.jpg', alt: 'Kylin Black Ghost Precision Macro Detail' },
+      { id: 'm-bg-3', url: 'https://api.kylintattoo.com/media/products/black_ghost_brass.jpg', alt: 'Kylin Black Ghost Raw Brass Vintage' },
     ],
     variants: [
-      { id: 'UHJvZHVjdFZhcmlhbnQ6MTA=', name: 'Antique Blue (Liner)', nameZh: 'Antique Blue (古法药水发蓝 / 割线)', sku: 'KYLIN-BG-LINER-BLU', price: 250.00, currency: 'USD', tuning: 'Liner', tuningZh: 'Liner (割线专用)', color: 'Antique Blue', imageUrl: 'http://localhost:8002/media/products/black_ghost_real_blue.jpg' },
-      { id: 'UHJvZHVjdFZhcmlhbnQ6MTE=', name: 'Antique Blue (Shader)', nameZh: 'Antique Blue (古法药水发蓝 / 打雾)', sku: 'KYLIN-BG-SHADER-BLU', price: 250.00, currency: 'USD', tuning: 'Shader', tuningZh: 'Shader (打雾专用)', color: 'Antique Blue', imageUrl: 'http://localhost:8002/media/products/black_ghost_real_macro.jpg' },
-      { id: 'UHJvZHVjdFZhcmlhbnQ6MTI=', name: 'Raw Brass (Liner)', nameZh: 'Raw Brass (原色复古铜)', sku: 'KYLIN-BG-RAW-BRS', price: 250.00, currency: 'USD', tuning: 'Liner', tuningZh: 'Liner (割线专用)', color: 'Polished Brass', imageUrl: 'http://localhost:8002/media/products/black_ghost_brass.jpg' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6MTA=', name: 'Antique Blue (Liner)', nameZh: 'Antique Blue (古法药水发蓝 / 割线)', sku: 'KYLIN-BG-LINER-BLU', price: 250.00, currency: 'USD', tuning: 'Liner', tuningZh: 'Liner (割线专用)', color: 'Antique Blue', imageUrl: 'https://api.kylintattoo.com/media/products/black_ghost_real_blue.jpg' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6MTE=', name: 'Antique Blue (Shader)', nameZh: 'Antique Blue (古法药水发蓝 / 打雾)', sku: 'KYLIN-BG-SHADER-BLU', price: 250.00, currency: 'USD', tuning: 'Shader', tuningZh: 'Shader (打雾专用)', color: 'Antique Blue', imageUrl: 'https://api.kylintattoo.com/media/products/black_ghost_real_macro.jpg' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6MTI=', name: 'Raw Brass (Liner)', nameZh: 'Raw Brass (原色复古铜)', sku: 'KYLIN-BG-RAW-BRS', price: 250.00, currency: 'USD', tuning: 'Liner', tuningZh: 'Liner (割线专用)', color: 'Polished Brass', imageUrl: 'https://api.kylintattoo.com/media/products/black_ghost_brass.jpg' },
     ]
   },
   {
@@ -150,14 +163,14 @@ export const INITIAL_PRODUCTS: KylinProduct[] = [
     startingPriceCny: 1050.00,
     badge: 'HERITAGE CRAFT',
     badgeZh: '纯手工经典',
-    imageUrl: 'http://localhost:8002/media/products/r07_polished.png',
+    imageUrl: 'https://api.kylintattoo.com/media/products/r07_polished.png',
     media: [
-      { id: 'm-r07-1', url: 'http://localhost:8002/media/products/r07_polished.png', alt: 'Kylin R07 Mirror-Polished Solid Brass' },
-      { id: 'm-r07-2', url: 'http://localhost:8002/media/products/r07_patina.jpg', alt: 'Kylin R07 Antique Vintage Patina' },
+      { id: 'm-r07-1', url: 'https://api.kylintattoo.com/media/products/r07_polished.png', alt: 'Kylin R07 Mirror-Polished Solid Brass' },
+      { id: 'm-r07-2', url: 'https://api.kylintattoo.com/media/products/r07_patina.jpg', alt: 'Kylin R07 Antique Vintage Patina' },
     ],
     variants: [
-      { id: 'UHJvZHVjdFZhcmlhbnQ6MTM=', name: 'Polished Brass', nameZh: 'Polished Brass (镜面纯黄铜)', sku: 'KYLIN-R07-LINER-BRS', price: 149.00, currency: 'USD', tuning: 'Liner', tuningZh: 'Liner (割线专用)', color: 'Polished Brass', imageUrl: 'http://localhost:8002/media/products/r07_polished.png' },
-      { id: 'UHJvZHVjdFZhcmlhbnQ6MTQ=', name: 'Antique Vintage Patina', nameZh: 'Antique Vintage Patina (复古氧化铜)', sku: 'KYLIN-R07-VINTAGE', price: 159.00, currency: 'USD', tuning: 'Liner', tuningZh: 'Liner (割线专用)', color: 'Antique Blue', imageUrl: 'http://localhost:8002/media/products/r07_patina.jpg' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6MTM=', name: 'Polished Brass', nameZh: 'Polished Brass (镜面纯黄铜)', sku: 'KYLIN-R07-LINER-BRS', price: 149.00, currency: 'USD', tuning: 'Liner', tuningZh: 'Liner (割线专用)', color: 'Polished Brass', imageUrl: 'https://api.kylintattoo.com/media/products/r07_polished.png' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6MTQ=', name: 'Antique Vintage Patina', nameZh: 'Antique Vintage Patina (复古氧化铜)', sku: 'KYLIN-R07-VINTAGE', price: 159.00, currency: 'USD', tuning: 'Liner', tuningZh: 'Liner (割线专用)', color: 'Antique Blue', imageUrl: 'https://api.kylintattoo.com/media/products/r07_patina.jpg' },
     ]
   },
   {
@@ -180,11 +193,11 @@ export const INITIAL_PRODUCTS: KylinProduct[] = [
     startingPriceCny: 268.00,
     badge: 'PRECISION MOD',
     badgeZh: '改装升级必备',
-    imageUrl: 'http://localhost:8002/media/products/cam_bearing.png',
+    imageUrl: 'https://api.kylintattoo.com/media/products/cam_bearing.png',
     variants: [
-      { id: 'UHJvZHVjdFZhcmlhbnQ6MTU=', name: 'Titanium Eccentric Cam 3.5mm', sku: 'KYLIN-PART-CAM-35', price: 38.00, currency: 'USD', stroke: '3.5mm', imageUrl: 'http://localhost:8002/media/products/cam_bearing.png' },
-      { id: 'UHJvZHVjdFZhcmlhbnQ6MTY=', name: 'Direct-Drive High-Impact Cam 4.2mm', sku: 'KYLIN-PART-CAM-42', price: 42.00, currency: 'USD', stroke: '4.2mm', imageUrl: 'http://localhost:8002/media/products/cam_bearing.png' },
-      { id: 'UHJvZHVjdFZhcmlhbnQ6MTc=', name: 'Extreme Power Stroke Cam 5.0mm', sku: 'KYLIN-PART-CAM-50', price: 45.00, currency: 'USD', stroke: '5.0mm', imageUrl: 'http://localhost:8002/media/products/cam_bearing.png' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6MTU=', name: 'Titanium Eccentric Cam 3.5mm', sku: 'KYLIN-PART-CAM-35', price: 38.00, currency: 'USD', stroke: '3.5mm', imageUrl: 'https://api.kylintattoo.com/media/products/cam_bearing.png' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6MTY=', name: 'Direct-Drive High-Impact Cam 4.2mm', sku: 'KYLIN-PART-CAM-42', price: 42.00, currency: 'USD', stroke: '4.2mm', imageUrl: 'https://api.kylintattoo.com/media/products/cam_bearing.png' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6MTc=', name: 'Extreme Power Stroke Cam 5.0mm', sku: 'KYLIN-PART-CAM-50', price: 45.00, currency: 'USD', stroke: '5.0mm', imageUrl: 'https://api.kylintattoo.com/media/products/cam_bearing.png' },
     ]
   },
   {
@@ -207,10 +220,10 @@ export const INITIAL_PRODUCTS: KylinProduct[] = [
     startingPriceCny: 480.00,
     badge: 'OEM MOTOR CORE',
     badgeZh: '原厂核心动力',
-    imageUrl: 'http://localhost:8002/media/products/needle_cartridge.jpg',
+    imageUrl: 'https://api.kylintattoo.com/media/products/needle_cartridge.jpg',
     variants: [
-      { id: 'UHJvZHVjdFZhcmlhbnQ6MTI=', name: 'Mabuchi High-Torque Custom Core', sku: 'KYLIN-MOT-MABUCHI', price: 68.00, currency: 'USD', imageUrl: 'http://localhost:8002/media/products/needle_cartridge.jpg' },
-      { id: 'UHJvZHVjdFZhcmlhbnQ6MTM=', name: 'Faulhaber 2610 Replacement Unit', sku: 'KYLIN-MOT-FH2610', price: 135.00, currency: 'USD', imageUrl: 'http://localhost:8002/media/products/needle_cartridge.jpg' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6MTI=', name: 'Mabuchi High-Torque Custom Core', sku: 'KYLIN-MOT-MABUCHI', price: 68.00, currency: 'USD', imageUrl: 'https://api.kylintattoo.com/media/products/needle_cartridge.jpg' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6MTM=', name: 'Faulhaber 2610 Replacement Unit', sku: 'KYLIN-MOT-FH2610', price: 135.00, currency: 'USD', imageUrl: 'https://api.kylintattoo.com/media/products/needle_cartridge.jpg' },
     ]
   },
   {
@@ -233,14 +246,14 @@ export const INITIAL_PRODUCTS: KylinProduct[] = [
     startingPriceCny: 420.00,
     badge: 'ENDURANCE POWER',
     badgeZh: '持久续航动力',
-    imageUrl: 'http://localhost:8002/media/products/kylin_smart_power_battery.jpg',
+    imageUrl: 'https://api.kylintattoo.com/media/products/kylin_smart_power_battery.jpg',
     media: [
-      { id: 'm-bat-1', url: 'http://localhost:8002/media/products/kylin_smart_power_battery.jpg', alt: 'T7max Wireless Li-Po Battery Pack' },
-      { id: 'm-bat-2', url: 'http://localhost:8002/media/products/dock_flight_case.jpg', alt: 'Studio Dual-Slot Quick Charging Dock' },
+      { id: 'm-bat-1', url: 'https://api.kylintattoo.com/media/products/kylin_smart_power_battery.jpg', alt: 'T7max Wireless Li-Po Battery Pack' },
+      { id: 'm-bat-2', url: 'https://api.kylintattoo.com/media/products/dock_flight_case.jpg', alt: 'Studio Dual-Slot Quick Charging Dock' },
     ],
     variants: [
-      { id: 'UHJvZHVjdFZhcmlhbnQ6MTQ=', name: 'T7max Wireless Li-Po Battery Pack 1800mAh', sku: 'KYLIN-BAT-T7', price: 59.00, currency: 'USD', imageUrl: 'http://localhost:8002/media/products/kylin_smart_power_battery.jpg' },
-      { id: 'UHJvZHVjdFZhcmlhbnQ6MTU=', name: 'Studio Dual-Slot Quick Charging Dock', sku: 'KYLIN-DOCK-DUAL', price: 75.00, currency: 'USD', imageUrl: 'http://localhost:8002/media/products/dock_flight_case.jpg' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6MTQ=', name: 'T7max Wireless Li-Po Battery Pack 1800mAh', sku: 'KYLIN-BAT-T7', price: 59.00, currency: 'USD', imageUrl: 'https://api.kylintattoo.com/media/products/kylin_smart_power_battery.jpg' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6MTU=', name: 'Studio Dual-Slot Quick Charging Dock', sku: 'KYLIN-DOCK-DUAL', price: 75.00, currency: 'USD', imageUrl: 'https://api.kylintattoo.com/media/products/dock_flight_case.jpg' },
     ]
   },
   {
@@ -263,10 +276,10 @@ export const INITIAL_PRODUCTS: KylinProduct[] = [
     startingPriceCny: 198.00,
     badge: 'STUDIO ESSENTIAL',
     badgeZh: '工作室精配耗材',
-    imageUrl: 'http://localhost:8002/media/products/cables_rca.jpg',
+    imageUrl: 'https://api.kylintattoo.com/media/products/cables_rca.jpg',
     variants: [
-      { id: 'UHJvZHVjdFZhcmlhbnQ6MTY=', name: '90° 24K Gold-Plated RCA Cable 2.5m', sku: 'KYLIN-RCA-GOLD', price: 28.00, currency: 'USD', imageUrl: 'http://localhost:8002/media/products/cables_rca.jpg' },
-      { id: 'UHJvZHVjdFZhcmlhbnQ6MTc=', name: 'Tempered Spring Steel & Silver Contact Kit', sku: 'KYLIN-SPRING-KIT', price: 22.00, currency: 'USD', imageUrl: 'http://localhost:8002/media/products/cables_rca.jpg' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6MTY=', name: '90° 24K Gold-Plated RCA Cable 2.5m', sku: 'KYLIN-RCA-GOLD', price: 28.00, currency: 'USD', imageUrl: 'https://api.kylintattoo.com/media/products/cables_rca.jpg' },
+      { id: 'UHJvZHVjdFZhcmlhbnQ6MTc=', name: 'Tempered Spring Steel & Silver Contact Kit', sku: 'KYLIN-SPRING-KIT', price: 22.00, currency: 'USD', imageUrl: 'https://api.kylintattoo.com/media/products/cables_rca.jpg' },
     ]
   }
 ];
@@ -342,8 +355,8 @@ export async function fetchSaleorProducts(channel: string = SALEOR_CHANNEL): Pro
         const initialVariant = initial?.variants.find(iv => iv.sku === v.sku || iv.name === v.name);
         const price = v.pricing?.price?.gross?.amount ?? initialVariant?.price ?? 0;
         const currency = v.pricing?.price?.gross?.currency ?? 'USD';
-        const liveVariantMediaUrl = v.media && v.media.length > 0 ? v.media[0].url : null;
-        const imageUrl = liveVariantMediaUrl || initialVariant?.imageUrl;
+        const liveVariantMediaUrl = v.media && v.media.length > 0 ? resolveMediaUrl(v.media[0].url) : null;
+        const imageUrl = liveVariantMediaUrl || resolveMediaUrl(initialVariant?.imageUrl);
 
         return {
           id: v.id, // REAL Saleor GraphQL ID e.g. UHJvZHVjdFZhcmlhbnQ6MQ==
@@ -368,12 +381,12 @@ export async function fetchSaleorProducts(channel: string = SALEOR_CHANNEL): Pro
       const categoryName = node.category?.name || initial?.categoryName || 'Machines';
 
       // Pick live GraphQL media URL if available, fallback to high-definition static URL
-      const liveMediaUrl = node.media && node.media.length > 0 ? node.media[0].url : null;
-      const imageUrl = liveMediaUrl || initial?.imageUrl || 'http://localhost:8002/media/products/e30_raw_titanium.jpg';
+      const liveMediaUrl = node.media && node.media.length > 0 ? resolveMediaUrl(node.media[0].url) : null;
+      const imageUrl = liveMediaUrl || resolveMediaUrl(initial?.imageUrl);
 
       const media = node.media && node.media.length > 0
-        ? node.media.map((m: any) => ({ id: m.id, url: m.url, alt: m.alt }))
-        : initial?.media || [{ id: 'hero-1', url: imageUrl, alt: node.name }];
+        ? node.media.map((m: any) => ({ id: m.id, url: resolveMediaUrl(m.url), alt: m.alt }))
+        : (initial?.media ? initial.media.map(m => ({ ...m, url: resolveMediaUrl(m.url) })) : [{ id: 'hero-1', url: imageUrl, alt: node.name }]);
 
       return {
         id: node.id, // REAL Saleor GraphQL Product ID

@@ -15,6 +15,11 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({ size = 'md' 
 
   const selectLanguage = (lang: 'en' | 'zh') => {
     i18n.changeLanguage(lang);
+    try {
+      localStorage.setItem('i18nextLng', lang);
+    } catch {
+      // ignore
+    }
     setIsOpen(false);
   };
 

@@ -267,11 +267,14 @@ const resources = {
   }
 };
 
+const savedLang = typeof window !== 'undefined' ? localStorage.getItem('i18nextLng') : null;
+const initialLng = (savedLang === 'zh' || savedLang === 'en') ? savedLang : 'en';
+
 i18n
-  .use(LanguageDetector)
   .use(initReactI18next)
   .init({
     resources,
+    lng: initialLng,
     fallbackLng: 'en',
     interpolation: {
       escapeValue: false,

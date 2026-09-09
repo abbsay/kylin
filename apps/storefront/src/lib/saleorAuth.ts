@@ -108,13 +108,14 @@ export async function saleorLogin(email: string, password: string): Promise<{ to
 }
 
 export async function saleorRegister(email: string, password: string): Promise<void> {
+  const redirectUrl = typeof window !== 'undefined' ? `${window.location.origin}/account` : 'https://kylintattoo.com/account';
   const query = `
-    mutation AccountRegister($email: String!, $password: String!) {
+    mutation AccountRegister($email: String!, $password: String!, $redirectUrl: String!) {
       accountRegister(input: {
         email: $email
         password: $password
         channel: "default-channel"
-        redirectUrl: "http://localhost:3001"
+        redirectUrl: $redirectUrl
       }) {
         errors {
           field
@@ -131,7 +132,7 @@ export async function saleorRegister(email: string, password: string): Promise<v
   const res = await fetch(SALEOR_GRAPHQL_ENDPOINT, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ query, variables: { email, password } }),
+    body: JSON.stringify({ query, variables: { email, password, redirectUrl } }),
   });
 
   const data = await res.json();

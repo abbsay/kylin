@@ -30,7 +30,7 @@ export const STATIC_HARDWARE_PARTS: PartItem[] = [
     price: 38.0,
     specs: 'Stroke: 3.5mm • Weight: 6.2g',
     compatibility: 'Kylin E30 / BL1 / Faulhaber 2610',
-    imageUrl: 'http://localhost:8002/media/products/cam_bearing.png',
+    imageUrl: 'https://api.kylintattoo.com/media/products/cam_bearing.png',
   },
   {
     id: 'cam-42',
@@ -42,7 +42,7 @@ export const STATIC_HARDWARE_PARTS: PartItem[] = [
     price: 42.0,
     specs: 'Stroke: 4.2mm • Heavy Duty Bearing',
     compatibility: 'Kylin E30 / Billow RCA',
-    imageUrl: 'http://localhost:8002/media/products/cam_bearing.png',
+    imageUrl: 'https://api.kylintattoo.com/media/products/cam_bearing.png',
   },
   {
     id: 'cam-50',
@@ -54,7 +54,7 @@ export const STATIC_HARDWARE_PARTS: PartItem[] = [
     price: 45.0,
     specs: 'Stroke: 5.0mm • Japanese NMB Bearing',
     compatibility: 'Kylin T7max / E30 Pro',
-    imageUrl: 'http://localhost:8002/media/products/cam_bearing.png',
+    imageUrl: 'https://api.kylintattoo.com/media/products/cam_bearing.png',
   },
   {
     id: 'motor-faulhaber-2610',
@@ -66,7 +66,7 @@ export const STATIC_HARDWARE_PARTS: PartItem[] = [
     price: 135.0,
     specs: '12V 10,800 RPM • Low Vibration',
     compatibility: 'Kylin Faulhaber 2610 Direct Replacement',
-    imageUrl: 'http://localhost:8002/media/products/needle_cartridge.jpg',
+    imageUrl: 'https://api.kylintattoo.com/media/products/needle_cartridge.jpg',
   },
   {
     id: 'motor-mabuchi-pro',
@@ -78,7 +78,7 @@ export const STATIC_HARDWARE_PARTS: PartItem[] = [
     price: 68.0,
     specs: '10V 9,500 RPM • High Efficiency',
     compatibility: 'Universal Kylin Rotary Pen',
-    imageUrl: 'http://localhost:8002/media/products/needle_cartridge.jpg',
+    imageUrl: 'https://api.kylintattoo.com/media/products/needle_cartridge.jpg',
   },
   {
     id: 'battery-t7-pack',
@@ -90,7 +90,7 @@ export const STATIC_HARDWARE_PARTS: PartItem[] = [
     price: 59.0,
     specs: 'USB-C Fast Charging • OLED Voltage DSP',
     compatibility: 'Kylin T7max Wireless Pen',
-    imageUrl: 'http://localhost:8002/media/products/kylin_smart_power_battery.jpg',
+    imageUrl: 'https://api.kylintattoo.com/media/products/kylin_smart_power_battery.jpg',
   },
   {
     id: 'battery-clip-dock',
@@ -102,7 +102,7 @@ export const STATIC_HARDWARE_PARTS: PartItem[] = [
     price: 75.0,
     specs: 'Input: PD 30W • Dual Smart Channels',
     compatibility: 'All Kylin Modular Battery Packs',
-    imageUrl: 'http://localhost:8002/media/products/dock_flight_case.jpg',
+    imageUrl: 'https://api.kylintattoo.com/media/products/dock_flight_case.jpg',
   },
   {
     id: 'rca-gold-cable',
@@ -114,7 +114,7 @@ export const STATIC_HARDWARE_PARTS: PartItem[] = [
     price: 28.0,
     specs: 'Zero Voltage Drop • Pure OFC Copper',
     compatibility: 'Universal RCA Tattoo Machines',
-    imageUrl: 'http://localhost:8002/media/products/cables_rca.jpg',
+    imageUrl: 'https://api.kylintattoo.com/media/products/cables_rca.jpg',
   },
   {
     id: 'brass-spring-kit',
@@ -126,7 +126,7 @@ export const STATIC_HARDWARE_PARTS: PartItem[] = [
     price: 32.0,
     specs: '0.45mm / 0.50mm thickness precision cut',
     compatibility: 'Kylin R07 / 20128 / Black Ghost',
-    imageUrl: 'http://localhost:8002/media/products/cables_rca.jpg',
+    imageUrl: 'https://api.kylintattoo.com/media/products/cables_rca.jpg',
   },
   {
     id: 'brass-binding-posts',
@@ -138,7 +138,7 @@ export const STATIC_HARDWARE_PARTS: PartItem[] = [
     price: 26.0,
     specs: '999 Sterling Silver Contact Screw',
     compatibility: 'Classic Coil Tattoo Machines',
-    imageUrl: 'http://localhost:8002/media/products/cables_rca.jpg',
+    imageUrl: 'https://api.kylintattoo.com/media/products/cables_rca.jpg',
   },
 ];
 
