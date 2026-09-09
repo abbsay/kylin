@@ -16,6 +16,7 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({ size = 'md' 
   const selectLanguage = (lang: 'en' | 'zh') => {
     i18n.changeLanguage(lang);
     try {
+      localStorage.setItem('kylin_user_lang_pref', lang);
       localStorage.setItem('i18nextLng', lang);
     } catch {
       // ignore

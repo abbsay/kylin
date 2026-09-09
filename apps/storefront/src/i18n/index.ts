@@ -267,8 +267,23 @@ const resources = {
   }
 };
 
-const savedLang = typeof window !== 'undefined' ? localStorage.getItem('i18nextLng') : null;
-const initialLng = (savedLang === 'zh' || savedLang === 'en') ? savedLang : 'en';
+const getInitialLanguage = (): string => {
+  if (typeof window === 'undefined') return 'en';
+  try {
+    const userPref = localStorage.getItem('kylin_user_lang_pref');
+    // Only switch to Chinese if the user explicitly clicked and selected Chinese
+    if (userPref === 'zh') {
+      return 'zh';
+    }
+    // Clear out legacy auto-detected i18nextLng from previous sessions
+    localStorage.removeItem('i18nextLng');
+    return 'en';
+  } catch {
+    return 'en';
+  }
+};
+
+const initialLng = getInitialLanguage();
 
 i18n
   .use(initReactI18next)
@@ -280,5 +295,17 @@ i18n
       escapeValue: false,
     },
   });
+
+// Absolute guarantee: unless explicitly opted into Chinese, enforce English
+if (typeof window !== 'undefined') {
+  try {
+    const userPref = localStorage.getItem('kylin_user_lang_pref');
+    if (userPref !== 'zh' && i18n.language !== 'en') {
+      i18n.changeLanguage('en');
+    }
+  } catch {
+    // ignore
+  }
+}
 
 export default i18n;
