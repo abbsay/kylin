@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from '@tanstack/react-router';
 import { useStore } from '../lib/StoreContext';
-import { ShoppingBag, Sun, Moon, User, Menu, X, ChevronRight, Download } from 'lucide-react';
+import { ShoppingBag, Sun, Moon, User, Menu, X, ChevronRight } from 'lucide-react';
 import { LanguageDropdown } from './LanguageDropdown';
 import { MiniCartBadge } from './MiniCartBadge';
-import { openPwaInstallGuide } from './PwaInstallPrompt';
 
 
 export const Navbar: React.FC = () => {
@@ -74,17 +73,6 @@ export const Navbar: React.FC = () => {
           <div className="flex items-center gap-0.5 sm:gap-1">
             {/* Language Selector (Apple Globe Popover) */}
             <LanguageDropdown size="sm" />
-
-            {/* PWA App Installation Trigger */}
-            <button
-              onClick={openPwaInstallGuide}
-              className="apple-btn px-2 py-1 rounded-full text-[#1d1d1f]/70 dark:text-[#f5f5f7]/70 hover:text-[#c5a059] dark:hover:text-[#c5a059] hover:bg-black/5 dark:hover:bg-white/10 flex items-center gap-1 transition-all text-xs"
-              title={isZh ? '安装桌面/移动 App' : 'Install PWA App'}
-              aria-label="Install App"
-            >
-              <Download className="w-3.5 h-3.5 text-[#c5a059]" />
-              <span className="hidden sm:inline text-[11px] font-semibold">{isZh ? '应用' : 'App'}</span>
-            </button>
 
             {/* Account Icon -> Dedicated /account */}
             <Link
@@ -160,22 +148,6 @@ export const Navbar: React.FC = () => {
                 <span>{isZh ? '艺术家账户' : 'Artist Account'}</span>
                 <ChevronRight className="w-4 h-4 text-[#86868b]" />
               </Link>
-
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  openPwaInstallGuide();
-                }}
-                className="w-full flex items-center justify-between py-3 text-lg font-semibold tracking-tight text-[#c5a059] border-b border-black/[0.05] dark:border-white/[0.05]"
-              >
-                <div className="flex items-center gap-2.5">
-                  <Download className="w-5 h-5 text-[#c5a059]" />
-                  <span>{isZh ? '安装桌面/移动应用' : 'Install Studio App'}</span>
-                </div>
-                <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-[#c5a059]/15 text-[#c5a059] font-mono font-bold">
-                  PWA
-                </span>
-              </button>
             </div>
 
             <div className="mt-8 pt-6 border-t border-black/[0.06] dark:border-white/[0.08] text-xs text-[#86868b] space-y-2">
