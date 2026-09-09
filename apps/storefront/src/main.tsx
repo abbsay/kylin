@@ -7,8 +7,22 @@ import { router } from './routes/router';
 import { queryClient } from './lib/queryClient';
 import { StoreProvider } from './lib/StoreContext';
 import { Toaster } from 'sonner';
+import { registerSW } from 'virtual:pwa-register';
 import './i18n';
 import './index.css';
+
+// Explicit PWA Service Worker Registration with automatic updates
+if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+  registerSW({
+    immediate: true,
+    onNeedRefresh() {
+      console.log('[PWA] New version detected, updating service worker...');
+    },
+    onOfflineReady() {
+      console.log('[PWA] Kylin Tattoo is ready for offline use.');
+    },
+  });
+}
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
