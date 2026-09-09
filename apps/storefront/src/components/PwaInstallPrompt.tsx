@@ -83,9 +83,8 @@ export const openPwaInstallGuide = () => {
 export const PwaInstallPrompt: React.FC = () => {
   const { i18n } = useTranslation();
   const isZh = i18n.language.startsWith('zh');
-  const { deferredPrompt, isStandalone, isModalOpen, setIsModalOpen, platform, triggerInstall } = usePwaState();
+  const { deferredPrompt, isModalOpen, setIsModalOpen, platform, triggerInstall } = usePwaState();
 
-  const [isBannerVisible, setIsBannerVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
@@ -101,99 +100,9 @@ export const PwaInstallPrompt: React.FC = () => {
     }
   }, [isModalOpen]);
 
-  useEffect(() => {
-    if (isStandalone) return;
-
-    // Check if dismissed within past 3 days
-    const dismissedAt = localStorage.getItem('kylin_pwa_dismissed');
-    if (dismissedAt) {
-      const days = (Date.now() - parseInt(dismissedAt, 10)) / (1000 * 60 * 60 * 24);
-      if (days < 3) return;
-    }
-
-    // Reveal subtle floating card after 2.5 seconds on first visit
-    const timer = setTimeout(() => {
-      setIsBannerVisible(true);
-    }, 2500);
-
-    return () => clearTimeout(timer);
-  }, [isStandalone]);
-
-  const handleDismiss = () => {
-    setIsBannerVisible(false);
-    try {
-      localStorage.setItem('kylin_pwa_dismissed', Date.now().toString());
-    } catch {
-      // ignore
-    }
-  };
-
-  const handleBannerAction = () => {
-    if (deferredPrompt) {
-      triggerInstall();
-    } else {
-      setModalVisible(true);
-    }
-  };
-
   return (
     <>
-      {/* 1. Floating Bottom-Right Apple Glass Banner (shows unless dismissed or in standalone) */}
-      {!isStandalone && isBannerVisible && (
-        <aside
-          aria-label="Install Kylin Tattoo Web App"
-          className="fixed bottom-5 right-5 z-40 max-w-sm w-[calc(100vw-2.5rem)] glass-panel-elevated p-4 rounded-3xl border border-black/[0.08] dark:border-white/[0.12] shadow-[0_16px_40px_rgba(0,0,0,0.18)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.6)] animate-apple-modal"
-        >
-          <div className="flex items-start gap-3.5">
-            <div className="w-11 h-11 rounded-2xl bg-black dark:bg-[#1a1a1c] border border-[#c5a059]/40 flex items-center justify-center shrink-0 shadow-xs overflow-hidden">
-              <img src="/pwa-icon.svg" alt="Kylin Tattoo Icon" className="w-9 h-9" />
-            </div>
-
-            <div className="flex-1 min-w-0 pr-1">
-              <div className="flex items-center gap-1.5">
-                <h4 className="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] tracking-tight truncate">
-                  {isZh ? '安装 Kylin 客户端应用' : 'Install Kylin Studio App'}
-                </h4>
-                <span className="px-1.5 py-0.5 rounded-full bg-[#c5a059]/15 text-[#c5a059] text-[9px] font-mono font-bold shrink-0">
-                  PWA Ready
-                </span>
-              </div>
-              <p className="text-[11px] text-[#6e6e73] dark:text-[#86868b] mt-0.5 leading-snug line-clamp-2">
-                {isZh
-                  ? '支持独立全屏运行、离线查看器材矩阵，像原生 App 一样流畅。'
-                  : 'Add to Home Screen or Dock for standalone 60fps specs & offline hardware access.'}
-              </p>
-
-              <div className="flex items-center gap-2 mt-3">
-                <button
-                  onClick={handleBannerAction}
-                  className="apple-btn px-3.5 py-1.5 rounded-full bg-[#1d1d1f] text-white dark:bg-white dark:text-[#1d1d1f] text-xs font-semibold flex items-center gap-1.5 shadow-xs hover:opacity-95 transition-all"
-                >
-                  <Download className="w-3.5 h-3.5" />
-                  <span>{isZh ? '立即添加' : 'Install Now'}</span>
-                </button>
-
-                <button
-                  onClick={handleDismiss}
-                  className="apple-btn px-3 py-1.5 rounded-full text-xs text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors"
-                >
-                  {isZh ? '稍后' : 'Not Now'}
-                </button>
-              </div>
-            </div>
-
-            <button
-              onClick={handleDismiss}
-              className="text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] p-1 -mr-1 -mt-1 rounded-full transition-colors"
-              aria-label="Close"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-        </aside>
-      )}
-
-      {/* 2. Apple Bespoke PWA Installation Guide Modal (Multi-device Instructions) */}
+      {/* Apple Bespoke PWA Installation Guide Modal (Triggered ONLY on user action: clicking 'App' in Navbar/menu) */}
       {modalVisible && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-apple-modal">
           <div
