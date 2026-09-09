@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Background Gradient - Full Bleed for Adaptive Icons -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#141416"/>
+      <stop offset="50%" stop-color="#09090b"/>
+      <stop offset="100%" stop-color="#020202"/>
+    </linearGradient>
+
+    <!-- Luxury Titanium Gold Gradient -->
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fdf4c9"/>
+      <stop offset="30%" stop-color="#d4af37"/>
+      <stop offset="60%" stop-color="#c5a059"/>
+      <stop offset="85%" stop-color="#9a7322"/>
+      <stop offset="100%" stop-color="#d4af37"/>
+    </linearGradient>
+
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#000" flood-opacity="0.8"/>
+    </filter>
+  </defs>
+
+  <!-- Full square bleed background for maskable requirement -->
+  <rect width="512" height="512" fill="url(#bgGrad)"/>
+
+  <!-- Centered safe zone content (within 80% circle) -->
+  <g transform="translate(51.2, 51.2) scale(0.8)">
+    <!-- Outer Precision Gauge Ring -->
+    <circle cx="256" cy="256" r="216" fill="none" stroke="url(#goldGrad)" stroke-width="2.5" stroke-opacity="0.35"/>
+    <circle cx="256" cy="256" r="202" fill="none" stroke="#c5a059" stroke-width="1" stroke-dasharray="3 7" stroke-opacity="0.4"/>
+
+    <!-- Precision Calibrated Degree Marks -->
+    <g stroke="url(#goldGrad)" stroke-width="2" stroke-linecap="round" opacity="0.6">
+      <line x1="256" y1="44" x2="256" y2="56"/>
+      <line x1="256" y1="456" x2="256" y2="468"/>
+      <line x1="44" y1="256" x2="56" y2="256"/>
+      <line x1="456" y1="256" x2="468" y2="256"/>
+      <line x1="106" y1="106" x2="116" y2="116"/>
+      <line x1="406" y1="106" x2="396" y2="116"/>
+      <line x1="106" y1="406" x2="116" y2="396"/>
+      <line x1="406" y1="406" x2="396" y2="396"/>
+    </g>
+
+    <!-- Central Crest Emblem: Kylin Architectural "K" + Needle Axis -->
+    <g filter="url(#softShadow)">
+      <path d="M168 118 C168 110 174 104 182 104 L204 104 C212 104 218 110 218 118 L218 394 C218 402 212 408 204 408 L182 408 C174 408 168 402 168 394 Z" fill="url(#goldGrad)"/>
+      <circle cx="218" cy="256" r="24" fill="#141416" stroke="url(#goldGrad)" stroke-width="6"/>
+      <circle cx="218" cy="256" r="8" fill="url(#goldGrad)"/>
+      <path d="M218 226 L306 128 C313 120 324 116 335 116 L366 116 C374 116 379 126 373 133 L268 250 L218 226 Z" fill="url(#goldGrad)"/>
+      <path d="M260 240 L370 379 C376 386 371 396 362 396 L330 396 C319 396 309 391 302 383 L218 278 L218 256 Z" fill="url(#goldGrad)"/>
+      <polygon points="218,300 230,266 206,266" fill="#fdf4c9" opacity="0.9"/>
+      <polygon points="193,82 199,98 187,98" fill="url(#goldGrad)"/>
+    </g>
+
+    <text x="256" y="440" font-family="'Cinzel', 'Trajan Pro', 'Georgia', serif" font-size="20" font-weight="700" fill="#c5a059" fill-opacity="0.85" letter-spacing="9" text-anchor="middle">KYLIN</text>
+  </g>
+</svg>

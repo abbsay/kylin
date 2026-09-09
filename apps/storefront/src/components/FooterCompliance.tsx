@@ -246,9 +246,18 @@ export const FooterCompliance: React.FC = () => {
                 <span>{isZh ? '无尘室级精密装配' : 'ISO-Certified Cleanroom'}</span>
               </li>
               <li>
-                <span className="text-[10px] text-[#c5a059] font-medium block pt-1">
-                  Saleor Core 3.22 Powered
-                </span>
+                <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                  <span className="text-[10px] text-[#c5a059] font-medium">
+                    Saleor Core 3.22
+                  </span>
+                  <span className="text-[10px] opacity-40">•</span>
+                  <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-emerald-500/10 text-emerald-500 font-mono font-medium border border-emerald-500/20">
+                    PWA Ready
+                  </span>
+                  <span className="text-[9px] font-mono text-[#86868b] block w-full mt-0.5">
+                    v2026.09.09-0430
+                  </span>
+                </div>
               </li>
             </ul>
           </div>

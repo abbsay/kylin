@@ -10,6 +10,7 @@ import { CraftSection } from './components/CraftSection';
 import { FooterCompliance } from './components/FooterCompliance';
 import { CartDrawer } from './components/CartDrawer';
 import { CheckoutModal } from './components/CheckoutModal';
+import { PwaInstallPrompt } from './components/PwaInstallPrompt';
 import { useQuery } from '@tanstack/react-query';
 import { fetchSaleorProducts, INITIAL_PRODUCTS } from './lib/catalog';
 
@@ -56,6 +57,7 @@ export const App: React.FC = () => {
       {/* Interactive Drawers & Modals */}
       <CartDrawer />
       <CheckoutModal />
+      <PwaInstallPrompt />
     </div>
   );
 };
