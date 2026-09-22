@@ -675,6 +675,9 @@ class ProductVariant(ChannelContextType[models.ProductVariant]):
             country_code = get_active_country(channel, address_data=address)
 
             def load_tax_country_exceptions(tax_config):
+                if not tax_config:
+                    return None
+
                 def load_default_tax_rate(tax_configs_per_country):
                     def calculate_pricing_info(data):
                         country_rates, default_country_rate_obj = data
@@ -1187,6 +1190,9 @@ class Product(ChannelContextType[models.Product]):
             country_code = get_active_country(channel, address_data=address)
 
             def load_tax_country_exceptions(tax_config):
+                if not tax_config:
+                    return None
+
                 def load_default_tax_rate(tax_configs_per_country):
                     def calculate_pricing_info(data):
                         country_rates, default_country_rate_obj = data

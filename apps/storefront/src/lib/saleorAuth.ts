@@ -1,4 +1,4 @@
-import { SALEOR_GRAPHQL_ENDPOINT } from './catalog';
+import { SALEOR_GRAPHQL_ENDPOINT, SALEOR_CHANNEL } from './catalog';
 
 export interface SaleorAddress {
   id: string;
@@ -53,9 +53,22 @@ export interface SaleorUser {
 }
 
 const TOKEN_KEY = 'kylin_saleor_auth_token';
+const REFRESH_TOKEN_KEY = 'kylin_saleor_refresh_token';
 
 export function getStoredToken(): string | null {
   return localStorage.getItem(TOKEN_KEY);
+}
+
+export function getStoredRefreshToken(): string | null {
+  return localStorage.getItem(REFRESH_TOKEN_KEY);
+}
+
+export function setStoredRefreshToken(token: string | null) {
+  if (token) {
+    localStorage.setItem(REFRESH_TOKEN_KEY, token);
+  } else {
+    localStorage.removeItem(REFRESH_TOKEN_KEY);
+  }
 }
 
 export function setStoredToken(token: string | null) {
@@ -63,7 +76,43 @@ export function setStoredToken(token: string | null) {
     localStorage.setItem(TOKEN_KEY, token);
   } else {
     localStorage.removeItem(TOKEN_KEY);
+    setStoredRefreshToken(null);
   }
+}
+
+export async function saleorRefreshToken(): Promise<string | null> {
+  const refreshToken = getStoredRefreshToken();
+  if (!refreshToken) return null;
+
+  const query = `
+    mutation TokenRefresh($refreshToken: String!) {
+      tokenRefresh(refreshToken: $refreshToken) {
+        token
+        errors {
+          field
+          message
+        }
+      }
+    }
+  `;
+
+  try {
+    const res = await fetch(SALEOR_GRAPHQL_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query, variables: { refreshToken } }),
+    });
+
+    const data = await res.json();
+    const payload = data?.data?.tokenRefresh;
+    if (payload?.token) {
+      localStorage.setItem(TOKEN_KEY, payload.token);
+      return payload.token;
+    }
+  } catch (err) {
+    console.warn('Failed to refresh Saleor token:', err);
+  }
+  return null;
 }
 
 export async function saleorLogin(email: string, password: string): Promise<{ token: string; user: SaleorUser }> {
@@ -71,6 +120,7 @@ export async function saleorLogin(email: string, password: string): Promise<{ to
     mutation TokenCreate($email: String!, $password: String!) {
       tokenCreate(email: $email, password: $password) {
         token
+        refreshToken
         errors {
           field
           message
@@ -104,17 +154,24 @@ export async function saleorLogin(email: string, password: string): Promise<{ to
   }
 
   setStoredToken(payload.token);
+  if (payload.refreshToken) {
+    setStoredRefreshToken(payload.refreshToken);
+  }
   return { token: payload.token, user: payload.user };
 }
 
-export async function saleorRegister(email: string, password: string): Promise<void> {
+export async function saleorRegister(
+  email: string,
+  password: string,
+  channel: string = SALEOR_CHANNEL
+): Promise<void> {
   const redirectUrl = typeof window !== 'undefined' ? `${window.location.origin}/account` : 'https://kylintattoo.com/account';
   const query = `
-    mutation AccountRegister($email: String!, $password: String!, $redirectUrl: String!) {
+    mutation AccountRegister($email: String!, $password: String!, $channel: String!, $redirectUrl: String!) {
       accountRegister(input: {
         email: $email
         password: $password
-        channel: "default-channel"
+        channel: $channel
         redirectUrl: $redirectUrl
       }) {
         errors {
@@ -132,7 +189,7 @@ export async function saleorRegister(email: string, password: string): Promise<v
   const res = await fetch(SALEOR_GRAPHQL_ENDPOINT, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ query, variables: { email, password, redirectUrl } }),
+    body: JSON.stringify({ query, variables: { email, password, channel, redirectUrl } }),
   });
 
   const data = await res.json();
@@ -246,16 +303,33 @@ export async function fetchSaleorMe(token: string): Promise<SaleorUser | null> {
   `;
 
   try {
-    const res = await fetch(SALEOR_GRAPHQL_ENDPOINT, {
+    let activeToken = token;
+    let res = await fetch(SALEOR_GRAPHQL_ENDPOINT, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${activeToken}`,
       },
       body: JSON.stringify({ query }),
     });
 
-    const data = await res.json();
+    let data = await res.json();
+    if (!data?.data?.me) {
+      // Attempt token refresh if session expired
+      const newToken = await saleorRefreshToken();
+      if (newToken) {
+        activeToken = newToken;
+        res = await fetch(SALEOR_GRAPHQL_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${activeToken}`,
+          },
+          body: JSON.stringify({ query }),
+        });
+        data = await res.json();
+      }
+    }
     return data?.data?.me || null;
   } catch (err) {
     console.warn('Failed to fetch me from Saleor:', err);

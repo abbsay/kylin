@@ -41,7 +41,7 @@ class TaxConfigurationByChannelId(DataLoader[int, TaxConfiguration]):
         tax_configs = TaxConfiguration.objects.using(
             self.database_connection_name
         ).in_bulk(keys, field_name="channel_id")
-        return [tax_configs[key] for key in keys]
+        return [tax_configs.get(key) for key in keys]
 
 
 class TaxClassCountryRateByTaxClassIDLoader(DataLoader[int, list[TaxClassCountryRate]]):

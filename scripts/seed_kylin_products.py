@@ -40,6 +40,7 @@ from saleor.attribute.models import (
 )
 from saleor.attribute.utils import associate_attribute_values_to_instance
 from saleor.channel.models import Channel
+from saleor.tax.models import TaxConfiguration
 from saleor.warehouse.models import Warehouse, Stock
 
 
@@ -52,18 +53,28 @@ def seed():
         defaults={
             "name": "Global USD Channel",
             "currency_code": "USD",
+            "default_country": "US",
             "is_active": True,
         }
     )
+    if not usd_channel.default_country:
+        usd_channel.default_country = "US"
+        usd_channel.save(update_fields=["default_country"])
+    TaxConfiguration.objects.get_or_create(channel=usd_channel)
 
     cny_channel, _ = Channel.objects.get_or_create(
         slug="channel-cny",
         defaults={
             "name": "China CNY Channel",
             "currency_code": "CNY",
+            "default_country": "CN",
             "is_active": True,
         }
     )
+    if not cny_channel.default_country:
+        cny_channel.default_country = "CN"
+        cny_channel.save(update_fields=["default_country"])
+    TaxConfiguration.objects.get_or_create(channel=cny_channel)
 
     warehouse = Warehouse.objects.first()
     if not warehouse:

@@ -197,6 +197,9 @@ class ProductChannelListing(ModelObjectType[models.ProductChannelListing]):
             country_code = get_active_country(channel, address_data=address)
 
             def load_tax_country_exceptions(tax_config):
+                if not tax_config:
+                    return None
+
                 def load_variant_channel_listings(data):
                     tax_configs_per_country = data
 

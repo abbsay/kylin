@@ -130,7 +130,7 @@ const resources = {
         signInBtn: "Sign In with Saleor JWT",
         registerBtn: "Create Studio Account",
         authenticating: "Authenticating with Saleor Core...",
-        demoCredentialsNote: "Default Admin credentials for testing: admin@kylintattoo.com / KylinTattoo2026!",
+        demoCredentialsNote: "Sign in with your artist credentials or register for studio procurement.",
       }
     }
   },
@@ -261,7 +261,7 @@ const resources = {
         signInBtn: "登录",
         registerBtn: "注册",
         authenticating: "正在验证...",
-        demoCredentialsNote: "体验账户提示：管理员 admin@kylintattoo.com / KylinTattoo2026!",
+        demoCredentialsNote: "使用您的艺术家账号登录，或注册新工作室账号进行采购。",
       }
     }
   }

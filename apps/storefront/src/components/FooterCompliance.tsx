@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from '@tanstack/react-router';
-import { ShieldCheck, Truck, Award, X, Globe, ExternalLink, ShoppingBag } from 'lucide-react';
+import { ShieldCheck, Truck, Award, X, Globe, ExternalLink, ShoppingBag, Download } from 'lucide-react';
+import { openPwaInstallGuide } from './PwaInstallPrompt';
 
 export const FooterCompliance: React.FC = () => {
   const { i18n } = useTranslation();
@@ -193,6 +194,16 @@ export const FooterCompliance: React.FC = () => {
                   {isZh ? '医疗级 CE / RoHS 认证' : 'CE & RoHS Certifications'}
                 </button>
               </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={openPwaInstallGuide}
+                  className="hover:text-[#c5a059] dark:hover:text-[#f7d995] text-[#86868b] transition-colors text-left flex items-center gap-1.5 cursor-pointer pt-1"
+                >
+                  <Download className="w-3 h-3 text-[#c5a059]" />
+                  <span>{isZh ? '安装 Kylin 独立应用程序 (PWA)' : 'Install Kylin Standalone App (PWA)'}</span>
+                </button>
+              </li>
             </ul>
           </div>
 
@@ -251,9 +262,14 @@ export const FooterCompliance: React.FC = () => {
                     Saleor Core 3.22
                   </span>
                   <span className="text-[10px] opacity-40">•</span>
-                  <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-emerald-500/10 text-emerald-500 font-mono font-medium border border-emerald-500/20">
+                  <button
+                    type="button"
+                    onClick={openPwaInstallGuide}
+                    className="text-[9px] px-1.5 py-0.2 rounded-full bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 font-mono font-medium border border-emerald-500/20 cursor-pointer transition-colors"
+                    title={isZh ? '点击查看 PWA 安装指南' : 'Click to open PWA installation guide'}
+                  >
                     PWA Ready
-                  </span>
+                  </button>
                   <span className="text-[9px] font-mono text-[#86868b] block w-full mt-0.5">
                     v2026.09.09-0430
                   </span>

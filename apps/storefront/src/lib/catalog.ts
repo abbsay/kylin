@@ -4,17 +4,31 @@ export const SALEOR_GRAPHQL_ENDPOINT =
   import.meta.env.VITE_SALEOR_API_URL || 'https://api.kylintattoo.com/graphql/';
 export const SALEOR_CHANNEL =
   import.meta.env.VITE_SALEOR_CHANNEL || 'default-channel';
+export const SALEOR_BASE_URL =
+  SALEOR_GRAPHQL_ENDPOINT.replace(/\/graphql\/?$/i, '');
 
 export const resolveMediaUrl = (url?: string | null): string => {
-  if (!url) return 'https://api.kylintattoo.com/media/products/e30_raw_titanium.jpg';
-  if (url.includes('localhost:8000') || url.includes('localhost:8002') || url.includes('127.0.0.1:8000') || url.includes('127.0.0.1:8002')) {
-    return url
-      .replace(/http:\/\/localhost:800[02]/g, 'https://api.kylintattoo.com')
-      .replace(/http:\/\/127\.0\.0\.1:800[02]/g, 'https://api.kylintattoo.com');
-  }
+  if (!url) return `${SALEOR_BASE_URL}/media/products/e30_raw_titanium.jpg`;
+
+  // If the URL is a relative path, prefix with current API host
   if (url.startsWith('/')) {
-    return `https://api.kylintattoo.com${url}`;
+    return `${SALEOR_BASE_URL}${url}`;
   }
+
+  // When deployed to production or staging with a remote API host, rewrite local dev URLs
+  if (
+    !SALEOR_BASE_URL.includes('localhost') &&
+    !SALEOR_BASE_URL.includes('127.0.0.1') &&
+    (url.includes('localhost:8000') ||
+      url.includes('localhost:8002') ||
+      url.includes('127.0.0.1:8000') ||
+      url.includes('127.0.0.1:8002'))
+  ) {
+    return url
+      .replace(/http:\/\/localhost:800[02]/g, SALEOR_BASE_URL)
+      .replace(/http:\/\/127\.0\.0\.1:800[02]/g, SALEOR_BASE_URL);
+  }
+
   return url;
 };
 

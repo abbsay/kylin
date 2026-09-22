@@ -30,7 +30,9 @@ import {
 interface StoreContextType {
   theme: 'dark' | 'light';
   toggleTheme: () => void;
-  currency: 'USD';
+  currency: 'USD' | 'CNY';
+  setCurrency: (c: 'USD' | 'CNY') => void;
+  toggleCurrency: () => void;
   cart: CartItem[];
   totalItems: number;
   addToCart: (item: CartItem, options?: { openDrawer?: boolean; simulateError?: boolean }) => Promise<void> | void;
@@ -66,7 +68,24 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const addToCartMutation = useAddToCartMutation();
 
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
-  const currency: 'USD' = 'USD';
+  const [currency, setCurrencyState] = useState<'USD' | 'CNY'>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('kylin_currency_pref') as 'USD' | 'CNY' | null;
+      if (saved === 'USD' || saved === 'CNY') return saved;
+    }
+    return 'USD';
+  });
+
+  const setCurrency = (c: 'USD' | 'CNY') => {
+    setCurrencyState(c);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('kylin_currency_pref', c);
+    }
+  };
+
+  const toggleCurrency = () => {
+    setCurrency(currency === 'USD' ? 'CNY' : 'USD');
+  };
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isAccountOpen, setIsAccountOpen] = useState(false);
@@ -196,6 +215,8 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         theme,
         toggleTheme,
         currency,
+        setCurrency,
+        toggleCurrency,
         cart,
         totalItems,
         addToCart,
